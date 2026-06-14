@@ -1,0 +1,75 @@
+/* Thiết lập cơ bản */
+body { 
+    font-family: Arial, sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #f4f6f8; 
+}
+
+/* Thanh menu */
+nav { 
+    background: #00529c; 
+    padding: 15px; 
+    color: white; 
+    display: flex; 
+    gap: 20px; 
+}
+
+nav a { 
+    color: white; 
+    text-decoration: none; 
+    cursor: pointer; 
+    font-weight: bold; 
+}
+
+/* Container chính */
+#main-app-content { 
+    padding: 20px; 
+    max-width: 800px; 
+    margin: auto; 
+}
+
+/* Thẻ câu hỏi (Card) */
+.faq-card { 
+    background: white; 
+    padding: 15px; 
+    margin-bottom: 15px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+}
+
+.faq-card h3 { 
+    margin-top: 0; 
+    color: #333; 
+}
+
+.faq-category { 
+    display: inline-block; 
+    padding: 4px 8px; 
+    background: #e0e0e0; 
+    border-radius: 4px; 
+    font-size: 12px; 
+    margin-bottom: 10px; 
+}
+
+/* Khu vực nút bấm */
+.faq-actions { 
+    display: flex; 
+    gap: 10px; 
+    margin-top: 15px; 
+    border-top: 1px solid #eee; 
+    padding-top: 10px; 
+}
+
+.btn-action { 
+    padding: 6px 12px; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    background: #e3f2fd; 
+    color: #0d47a1; 
+}
+
+.btn-action:hover {
+    background: #bbdefb;
+}
