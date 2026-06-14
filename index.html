@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cổng Hỗ Trợ Học Vụ TLU</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-blue"> <div id="login-screen" class="screen-container active">
+        <div class="login-box">
+            <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/12/logo-dai-hoc-thuy-loi-inkythuatso-converted-01-23-08-45-05.jpg" alt="TLU Logo" class="logo">
+            <h2>Đăng nhập Hệ thống</h2>
+            <p>Sử dụng email sinh viên @tlu.edu.vn</p>
+            
+            <form id="login-form">
+                <input type="email" id="email" placeholder="MãSinhVien@tlu.edu.vn" required>
+                <input type="password" id="password" placeholder="Mật khẩu" required>
+                <button type="submit" id="login-btn">Đăng nhập</button>
+                <p id="login-error" class="error-msg"></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-shell" class="screen-container">
+        <header class="app-header">
+            <div class="header-title">TLU Helpdesk</div>
+            <div class="theme-switcher">
+                <button onclick="changeTheme('theme-blue')" style="background: #0056b3;"></button>
+                <button onclick="changeTheme('theme-pink')" style="background: #e91e63;"></button>
+                <button onclick="changeTheme('theme-orange')" style="background: #ff9800;"></button>
+                <button onclick="changeTheme('theme-black')" style="background: #333333;"></button>
+                <button id="logout-btn">Đăng xuất</button>
+            </div>
+        </header>
+
+        <main id="main-content">
+            <h2>Chào mừng bạn đến với Cổng hỗ trợ học vụ</h2>
+            <p>Nội dung</p>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-target="home">Trang chủ</button>
+            <button class="nav-item" data-target="saved">Đã lưu</button>
+            <button class="nav-item" data-target="history">Lịch sử</button>
+        </nav>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
