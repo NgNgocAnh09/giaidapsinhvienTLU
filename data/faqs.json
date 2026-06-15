@@ -1,90 +1,194 @@
 [
     {
         "faq_id": "faq_001",
-        "category": "hoc_phi",
-        "question": "Làm sao để nộp học phí qua ứng dụng ngân hàng?",
-        "answer": "Sinh viên thực hiện chuyển khoản vào tài khoản của nhà trường theo hướng dẫn sau:\n\n1. Mở ứng dụng ngân hàng (Vietcombank, BIDV, Agribank, ...)\n2. Chọn mục \"Chuyển khoản\"\n3. Nhập số tài khoản: 1234567890 — Ngân hàng Vietcombank\n4. Nội dung chuyển khoản: [Mã SV] - [Họ tên] - Nộp học phí HK2\n5. Kiểm tra lại thông tin và xác nhận\n\nLưu ý: Giữ lại biên lai giao dịch để đối chiếu khi cần thiết. Học phí sẽ được cập nhật trong vòng 3-5 ngày làm việc.",
-        "likes": 45,
-        "dislikes": 3
+        "category": "tin_chi",
+        "question": "Làm thế nào để đăng ký tín chỉ trực tuyến và thời gian đăng ký thường vào lúc nào?",
+        "answer": "Sinh viên đăng ký tín chỉ trực tuyến qua web https://sinhvien1.tlu.edu.vn/ thời gian sẽ được phòng Đào Tạo thông báo, lịch đăng ký sẽ chia theo từng khóa",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_002",
-        "category": "hoc_phi",
-        "question": "Hạn cuối đóng học phí học kỳ 2 là khi nào?",
-        "answer": "Hạn cuối đóng học phí Học kỳ 2 năm học 2025-2026 là ngày 30/06/2026.\n\nSinh viên chưa hoàn thành nghĩa vụ học phí sẽ:\n• Không được xem điểm thi\n• Không được đăng ký học phần kỳ tiếp theo\n• Bị tạm khóa tài khoản sinh viên\n\nTrường hợp khó khăn tài chính, liên hệ Phòng Tài chính Kế toán để được hỗ trợ phương án đóng học phí theo đợt.",
-        "likes": 32,
-        "dislikes": 1
+        "category": "tin_chi",
+        "question": "Hạn hủy hoặc rút bớt học phần/tín chỉ đã đăng ký là khi nào và thủ tục ra sao?",
+        "answer": "Sinh viên có thể hủy học phần đăng ký trong 2 tuần đầu của giai đoạn học, sinh viên lên Phòng Đào Tạo nhà A4 để hủy học phần",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_003",
-        "category": "hoc_phi",
-        "question": "Sinh viên được miễn giảm học phí trong trường hợp nào?",
-        "answer": "Các đối tượng được miễn giảm học phí theo quy định:\n\n🔹 Miễn 100%:\n• Con liệt sĩ, con thương binh nặng\n• Sinh viên mồ côi cả cha lẫn mẹ\n• Sinh viên khuyết tật nặng\n\n🔹 Giảm 70%:\n• Sinh viên dân tộc thiểu số thuộc hộ nghèo\n\n🔹 Giảm 50%:\n• Sinh viên thuộc hộ nghèo theo chuẩn quốc gia\n\nHồ sơ nộp tại Phòng Công tác Sinh viên trước ngày 15 của tháng đầu mỗi học kỳ.",
-        "likes": 28,
+        "category": "tin_chi",
+        "question": "Số lượng tín chỉ tối thiểu và tối đa được phép đăng ký?",
+        "answer": "Khối lượng tối thiểu không ít hơn 11 tín và tối đa không vượt quá 26 tín, trong 1 vài trường hợp đặc biệt ( sinh viên có sức khỏe yếu, sinh viên học 2 văn bằng,....) nhà trường sẽ xem xét điều chỉnh giới hạn khối lượng học tập cho sinh viên",
+        "likes": 0,
         "dislikes": 0
     },
     {
         "faq_id": "faq_004",
-        "category": "dang_ky",
-        "question": "Cách đăng ký học phần trên hệ thống?",
-        "answer": "Quy trình đăng ký học phần online:\n\n1. Truy cập hệ thống: https://qldt.tlu.edu.vn\n2. Đăng nhập bằng tài khoản sinh viên\n3. Vào mục \"Đăng ký học phần\"\n4. Chọn các môn học theo kế hoạch đào tạo\n5. Chọn lớp và ca học phù hợp\n6. Nhấn \"Xác nhận đăng ký\"\n\n⚠️ Lưu ý quan trọng:\n• Kiểm tra điều kiện tiên quyết trước khi đăng ký\n• Số tín chỉ tối thiểu: 14 TC/kỳ, tối đa: 25 TC/kỳ\n• Nên đăng ký sớm để có nhiều lựa chọn lớp học",
-        "likes": 55,
-        "dislikes": 2
+        "category": "tin_chi",
+        "question": "Tổng số tín chỉ của các ngành học là bao nhiêu?",
+        "answer": "Quy chế phân định trình độ năm học của sinh viên dựa trên số tín chỉ tích lũy tăng dần qua từng năm. Qua đó, bạn có thể thấy được tổng số tín chỉ thiết kế tối đa cho toàn khóa của từng nhóm ngành:  \n\nNhóm ngành Kinh tế, Kinh doanh và Quản lý, Ngôn ngữ:\n\nSinh viên năm thứ nhất: Tích lũy dưới 35 tín chỉ.  \n\nSinh viên năm thứ hai: Tích lũy từ 35 đến 70 tín chỉ.  \n\nSinh viên năm thứ ba: Tích lũy từ 71 đến 102 tín chỉ.  \n\nSinh viên năm thứ tư: Tích lũy từ 103 đến 130 tín chỉ.(Khung chương trình đào tạo của nhóm ngành này được thiết kế tối đa quanh mốc 130 tín chỉ ).  \n\nNhóm ngành Kỹ thuật, Công nghệ, Quản lý xây dựng:\n\nSinh viên năm thứ nhất: Tích lũy dưới 37 tín chỉ.  \n\nSinh viên năm thứ hai: Tích lũy từ 37 đến 72 tín chỉ.  \n\nSinh viên năm thứ ba: Tích lũy từ 73 đến 108 tín chỉ.  \n\nSinh viên năm thứ tư: Tích lũy từ 109 đến 142 tín chỉ.  \n\nSinh viên năm thứ năm: Tích lũy từ 143 tín chỉ trở lên.(Khung chương trình đào tạo của nhóm ngành này được thiết kế dài hơn, đạt từ 143 tín chỉ trở lên )",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_005",
-        "category": "dang_ky",
-        "question": "Làm sao để hủy đăng ký học phần đã đăng ký?",
-        "answer": "Hướng dẫn hủy học phần:\n\n1. Đăng nhập hệ thống QLDT\n2. Vào \"Đăng ký học phần\" → \"Kết quả đăng ký\"\n3. Tìm môn cần hủy và nhấn \"Hủy đăng ký\"\n4. Xác nhận hủy\n\n⏰ Thời hạn hủy: Trong 2 tuần đầu của học kỳ (không mất phí)\nSau 2 tuần: Được rút học phần nhưng vẫn phải đóng 50% học phí môn đó.\n\nSinh viên cần cân nhắc kỹ trước khi hủy để đảm bảo đủ số tín chỉ tối thiểu trong kỳ.",
-        "likes": 20,
-        "dislikes": 1
+        "category": "tin_chi",
+        "question": "Quy định về việc học lại và học cải thiện?",
+        "answer": "Đối với học phần bắt buộc thì sinh viên phải đăng ký lại chính học phần đó, học phần tự chọn thì sinh viên có thể chọn học lại học phần đó hoặc chọn 1 học phần khác, học lại thì không quá 6% tổng số tín sẽ không bị hạ bằng còn học cải thiện không giới hạn",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_006",
-        "category": "tot_nghiep",
-        "question": "Điều kiện để được xét tốt nghiệp là gì?",
-        "answer": "Điều kiện xét tốt nghiệp tại Đại học Thủy Lợi:\n\n✅ Tích lũy đủ số tín chỉ theo chương trình đào tạo\n✅ Điểm trung bình tích lũy (CPA) ≥ 2.0/4.0\n✅ Không đang trong thời gian bị truy cứu trách nhiệm hình sự\n✅ Hoàn thành nghĩa vụ học phí\n✅ Đạt chuẩn đầu ra Tiếng Anh (TOEIC ≥ 450 hoặc tương đương)\n✅ Đạt chuẩn đầu ra Tin học (chứng chỉ IC3/MOS hoặc tương đương)\n✅ Hoàn thành Giáo dục Quốc phòng – An ninh\n✅ Đã bảo vệ Đồ án / Khóa luận tốt nghiệp đạt yêu cầu",
-        "likes": 67,
-        "dislikes": 4
+        "category": "hoc_phi",
+        "question": "Đóng học phí chậm có bị sao không ?",
+        "answer": "Sinh viên thực hiện không theo đúng quy định về nộp học phí sẽ bị xử lý như sau:\n- Đối với sinh viên đang học các môn học: Khóa tài khoản đăng ký học ít nhất 01 học kỳ cho đến khi sinh viên hoàn thành học phí;\n- Đối với sinh viên đang trong thời gian thực hiện Học phần tốt nghiệp: Sinh viên không được bảo vệ Học phần tốt nghiệp. Sinh viên chỉ được bảo vệ Học phần tốt nghiệp cùng với các đợt sau (theo kế hoạch trường tổ chức) nếu đã hoàn thành học phí.",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_007",
-        "category": "tot_nghiep",
-        "question": "Quy trình nộp hồ sơ xét tốt nghiệp?",
-        "answer": "Quy trình nộp hồ sơ xét tốt nghiệp:\n\nBước 1: Kiểm tra điều kiện tốt nghiệp trên hệ thống QLDT\nBước 2: Chuẩn bị hồ sơ gồm:\n   • Đơn xin xét tốt nghiệp (theo mẫu)\n   • Bản sao chứng chỉ Tiếng Anh\n   • Bản sao chứng chỉ Tin học\n   • Chứng nhận hoàn thành GDQP-AN\n   • 4 ảnh 3x4 (nền xanh)\nBước 3: Nộp hồ sơ tại Phòng Đào tạo\nBước 4: Theo dõi kết quả trên website trường\n\nThời gian xét: 30 ngày làm việc kể từ ngày kết thúc nhận hồ sơ.",
-        "likes": 38,
-        "dislikes": 2
+        "category": "hoc_phi",
+        "question": "Thời gian thu học phí là khi nào ?",
+        "answer": "- Học phí của học kỳ chính và học kỳ thực hiện Học phần tốt nghiệp được thu một lần vào tuần học thứ tư của mỗi giai đoạn học. \n- Học phí của học kỳ song song với học kỳ chính, học kỳ hè được thu vào tuần học thứ hai của mỗi kỳ học",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_008",
-        "category": "hoc_bong",
-        "question": "Các loại học bổng hiện có tại TLU?",
-        "answer": "Đại học Thủy Lợi hiện có các loại học bổng:\n\n🏆 Học bổng Khuyến khích Học tập:\n• Loại Xuất sắc: 100% học phí\n• Loại Giỏi: 50% học phí\n• Loại Khá: 30% học phí\n\n🌟 Học bổng Tài năng TLU:\n• Dành cho sinh viên có thành tích nghiên cứu khoa học, thi đấu thể thao quốc gia\n\n🤝 Học bổng Doanh nghiệp:\n• Học bổng Samsung, Vietcombank, EVN (theo từng đợt)\n\n💚 Học bổng Hỗ trợ:\n• Dành cho sinh viên có hoàn cảnh khó khăn vượt khó\n\nThông tin chi tiết xem tại: Phòng Công tác Sinh viên",
-        "likes": 51,
-        "dislikes": 1
+        "category": "hoc_phi",
+        "question": "Những ai được giảm học phí ?",
+        "answer": "- Đối tượng được giảm 70% học phí: Sinh viên người dân tộc thiểu số (không phải là người dân tộc thiểu số rất ít người) ở thôn/bản đặc biệt khó khăn, xã khu vực III vùng dân tộc và miền núi, xã đặc biệt khó khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan có thẩm quyền.\n- Đối tượng được giảm 50% học phí: Sinh viên là con cán bộ, công chức, viên chức, công nhân mà cha hoặc mẹ bị tai nạn lao động hoặc mắc bệnh nghề nghiệp được hưởng trợ cấp thường xuyên.",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_009",
-        "category": "hoc_bong",
-        "question": "Điều kiện để được xét học bổng khuyến khích học tập?",
-        "answer": "Điều kiện xét Học bổng Khuyến khích Học tập:\n\n📌 Điều kiện chung:\n• Không vi phạm kỷ luật trong học kỳ xét\n• Không có môn điểm F hoặc bị cấm thi\n• Đăng ký tối thiểu 14 tín chỉ trong kỳ\n\n📌 Xếp loại cụ thể:\n• Xuất sắc: GPA ≥ 3.6 và Rèn luyện Xuất sắc\n• Giỏi: GPA ≥ 3.2 và Rèn luyện Tốt trở lên\n• Khá: GPA ≥ 2.8 và Rèn luyện Khá trở lên\n\nHọc bổng được xét tự động sau mỗi học kỳ, sinh viên không cần nộp đơn.",
-        "likes": 42,
+        "category": "hoc_phi",
+        "question": "Những ai được miễn học phí ?",
+        "answer": "- Đối tượng 1: Sinh viên thuộc đối tượng theo quy định tại Pháp lệnh Ưu đãi người có công với cách mạng\n- Đối tượng 2: Sinh viên bị khuyết tật.\n- Đối tượng 3: Sinh viên (tuổi không quá 22) không có nguồn nuôi dưỡng thuộc đối tượng hưởng trợ cấp xã hội hàng tháng theo quy định tại khoản 1 và 2 Điều 5 Nghị định số 20/2021/NĐ-CP ngày 15/3/2021 của Chính phủ.\n- Đối tượng 4: Sinh viên là người dân tộc thiểu có cha hoặc mẹ hoặc cả cha và mẹ hoặc ông bà (trong trường hợp ở với ông bà) thuộc hộ nghèo và hộ cận nghèo theo quy định của Thủ tướng Chính phủ.\n- Đối tượng 5: Sinh viên người dân tộc thiểu số rất ít người (Cống, Mảng, Pu Péo, Si La, Cờ Lao, Bố Y, La Ha, Ngái, Chứt, Ơ Đu, Brâu, Rơ Măm, Lô Lô, Lự, Pà Thẻn, La Hủ) ở vùng có điều kiện kinh tế - xã hội khó khăn hoặc đặc biệt khó khăn\n- Đối tượng 6: Sinh viên hệ cử tuyển.",
+        "likes": 0,
         "dislikes": 0
     },
     {
         "faq_id": "faq_010",
-        "category": "ktx",
-        "question": "Cách đăng ký ở ký túc xá?",
-        "answer": "Hướng dẫn đăng ký ở Ký túc xá TLU:\n\n1. Truy cập website KTX: https://ktx.tlu.edu.vn\n2. Điền đơn đăng ký online\n3. Chọn loại phòng:\n   • Phòng 6 người: 200.000đ/tháng\n   • Phòng 4 người: 350.000đ/tháng\n   • Phòng 2 người (có điều hòa): 600.000đ/tháng\n4. Nộp hồ sơ gốc tại Ban Quản lý KTX\n5. Đóng phí và nhận phòng\n\n📋 Hồ sơ cần thiết:\n• Đơn đăng ký (theo mẫu)\n• Bản sao CMND/CCCD\n• Giấy xác nhận sinh viên\n• 2 ảnh 3x4\n\nƯu tiên: Sinh viên năm nhất, sinh viên ngoại tỉnh, sinh viên có hoàn cảnh khó khăn.",
-        "likes": 33,
-        "dislikes": 2
+        "category": "hoc_phi",
+        "question": "Con của người có công với cách mạng muốn nộp hồ sơ miễn học phí thì cần những giấy tờ gì ?",
+        "answer": "Hồ sơ cần nộp bao gồm:\n1/ Đơn đề nghị  miễn giảm học phí \n2/ Bản sao Giấy khai sinh;\n3/ Giấy xác nhận của cơ quan quản lý đối tượng người có công có con thuộc diện miễn giảm học phí;\n4/ Bản sao thẻ Thương bệnh binh của bố/mẹ (nếu có).",
+        "likes": 0,
+        "dislikes": 0
     },
     {
         "faq_id": "faq_011",
-        "category": "ktx",
-        "question": "Nội quy và quy định ở KTX?",
-        "answer": "Nội quy Ký túc xá Đại học Thủy Lợi:\n\n🕐 Giờ giấc:\n• Đóng cổng: 23:00 hàng ngày\n• Mở cổng: 05:00 sáng\n• Giờ yên tĩnh: 22:00 — 06:00\n\n🚫 Nghiêm cấm:\n• Sử dụng chất kích thích, rượu bia trong KTX\n• Nấu ăn trong phòng ở\n• Chứa chấp người lạ qua đêm\n• Sử dụng thiết bị điện công suất lớn\n\n✅ Quy định:\n• Giữ vệ sinh phòng ở và khu vực chung\n• Đóng tiền phòng đúng hạn (trước ngày 10 hàng tháng)\n• Báo cáo Ban Quản lý khi có sự cố\n• Tham gia các buổi kiểm tra phòng ở định kỳ",
-        "likes": 18,
-        "dislikes": 3
+        "category": "khao_thi",
+        "question": "Tôi bị trùng lịch thi hai môn vào cùng một ca thi thì phải làm thế nào để xin hoãn thi?",
+        "answer": "Trường hợp bị trùng lịch thi, sinh viên làm Đơn xin hoãn thi (theo mẫu tại văn phòng Khoa/Phòng Khảo thí) và nộp minh chứng lịch thi bị trùng trước ngày thi ít nhất 3 ngày làm việc. Nhà trường sẽ xem xét giải quyết cho sinh viên thi bổ sung vào đợt thi phụ hoặc ghép với khóa sau.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_012",
+        "category": "khao_thi",
+        "question": "Sau khi công bố điểm thi, nếu muốn phúc khảo (chấm phúc tra) bài thi tự luận thì nộp đơn ở đâu và hạn chót là khi nào?",
+        "answer": "Sinh viên nộp Đơn xin phúc khảo bài thi tại Phòng Khảo thí và Đảm bảo chất lượng (tầng 1, toà A4). Thời hạn nhận đơn phúc khảo là trong vòng 7 ngày làm việc kể từ ngày phòng Khảo thí công bố điểm thi chính thức trên hệ thống. Lệ phí phúc khảo tính theo quy định hiện hành của nhà trường.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_013",
+        "category": "khao_thi",
+        "question": "Đang làm bài thi trắc nghiệm cuối kỳ trên máy tính mà hệ thống bị sập hoặc máy bị mất mạng thì điểm số được tính thế nào?",
+        "answer": "Khi gặp sự cố kỹ thuật (mất mạng, sập nguồn máy tính), sinh viên phải giữ nguyên vị trí và báo ngay cho Cán bộ coi thi (giám thị). Giám thị sẽ lập biên bản xác nhận sự cố, phối hợp với kỹ thuật viên để khôi phục lại lượt thi (giữ nguyên thời gian và các câu đã làm) hoặc bố trí cho sinh viên làm lại bài thi bằng đề dự phòng.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_014",
+        "category": "khao_thi",
+        "question": "Thời hạn nộp chứng chỉ tiếng Anh quốc tế (IELTS/TOEIC) để xét miễn thi học phần tiếng Anh hoặc xét tốt nghiệp là khi nào?",
+        "answer": "Nhà trường tiếp nhận chứng chỉ tiếng Anh quốc tế (còn thời hạn 2 năm) theo các đợt trong năm học. Để xét miễn thi học phần, sinh viên nộp trước tuần học thứ 2 của học kỳ. Để xét tốt nghiệp, sinh viên phải nộp chứng chỉ chậm nhất là 4 tuần trước khi Hội đồng xét tốt nghiệp họp (theo thông báo cụ thể của từng đợt tốt nghiệp).",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_015",
+        "category": "khao_thi",
+        "question": "Đến ngày thi mà tôi bị mất thẻ sinh viên thì có được vào phòng thi không và cần mang giấy tờ gì thay thế?",
+        "answer": "Sinh viên bị mất thẻ sinh viên vẫn được vào phòng thi nếu xuất trình được một trong các giấy tờ tùy thân có dán ảnh hợp lệ như: Căn cước công dân (CCCD), Hộ chiếu, hoặc Giấy phép lái xe. Đồng thời, sinh viên cần chủ động liên hệ Phòng Công tác chính trị & Quản lý sinh viên để làm thủ tục cấp lại thẻ trước đợt thi tiếp theo.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_016",
+        "category": "hanh_chinh",
+        "question": "Làm thế nào để xin cấp Giấy chứng nhận sinh viên (để làm vé xe buýt, hoãn nghĩa vụ quân sự...)?",
+        "answer": "Sinh viên đăng ký trực tuyến qua cổng thông tin sinh viên hoặc ứng dụng của trường (hoặc nộp form tại Phòng Công tác chính trị và Quản lý sinh viên). Sau khi hệ thống xác nhận, sinh viên nhận giấy hẹn và đến lấy kết quả trực tiếp tại phòng chức năng theo đúng thời gian quy định.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_017",
+        "category": "hanh_chinh",
+        "question": "Rút lại học bạ hoặc bằng tốt nghiệp THPT chính thức đã nộp khi nhập học thì cần làm những thủ tục gì?",
+        "answer": "Sinh viên mang theo Thẻ sinh viên hoặc Căn cước công dân đến Phòng Đào tạo. Tại đây, sinh viên điền vào mẫu đơn xin rút hồ sơ/văn bằng, nêu rõ lý do (ví dụ: mượn đi công chứng, thôi học...). Sau khi được Ban Giám hiệu phê duyệt, phòng Đào tạo sẽ bàn giao lại giấy tờ gốc và ký biên bản giao nhận.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_018",
+        "category": "hanh_chinh",
+        "question": "Mất thẻ sinh viên thì phải làm thủ tục cấp lại ở đâu và lệ phí như thế nào?",
+        "answer": "Sinh viên đến Phòng Công tác chính trị và Quản lý sinh viên để làm thủ tục xin cấp lại thẻ. Tại đây, bạn sẽ điền form đề nghị cấp lại thẻ sinh viên, nộp kèm 1 ảnh 3x4 và đóng lệ phí cấp lại theo quy định của nhà trường. Thời gian nhận lại thẻ mới thường từ 5 - 7 ngày làm việc.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_019",
+        "category": "hanh_chinh",
+        "question": "Nếu bản thân bị ốm hoặc có việc gia đình đột xuất phải nghỉ học nhiều ngày thì cần làm thủ tục xin phép như thế nào để không bị tính là nghỉ tự do?",
+        "answer": "Sinh viên phải làm Đơn xin nghỉ học tạm thời (có chữ ký xác nhận của phụ huynh nếu nghỉ dài ngày) kèm theo minh chứng hợp pháp (như giấy ra viện, giấy xác nhận của bệnh viện nếu nghỉ ốm). Đơn nộp về Văn phòng Khoa quản lý ngành học của sinh viên và gửi bản sao cho giảng viên bộ môn để được xem xét hoãn thi hoặc không bị cấm thi do nghỉ quá số buổi.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_020",
+        "category": "hanh_chinh",
+        "question": "Nếu phát hiện thông tin cá nhân (Họ tên, ngày sinh, quê quán, số CCCD...) trên hệ thống quản lý sinh viên của trường bị sai thì cần gặp ai để sửa?",
+        "answer": "Sinh viên cần mang theo Thẻ sinh viên và bản sao công chứng các giấy tờ pháp lý liên quan (Giấy khai sinh, CCCD) đến phòng Đào tạo để làm thủ tục đính chính. Việc chỉnh sửa thông tin cần được thực hiện càng sớm càng tốt để tránh ảnh hưởng đến việc làm bằng tốt nghiệp và các giấy tờ hành chính sau này.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_021",
+        "category": "ky_thuat",
+        "question": "Nếu quên mật khẩu để đăng nhập thì sao?",
+        "answer": "Sinh viên có thể nhấn nút \"Quên mật khẩu\" ngay tại form đăng nhập để hệ thống kích hoạt luồng xác thực và gửi liên kết đặt lại mật khẩu về email khôi phục.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_022",
+        "category": "ky_thuat",
+        "question": "Làm sao để cập nhật nhanh nhất các thông báo khẩn cấp của nhà trường như lịch nghỉ học, hạn đóng học phí?",
+        "answer": "Ngay khi truy cập vào Màn hình Trang chủ (Home Tab), sinh viên sẽ thấy hệ thống tự động hiển thị các thông tin quan trọng nhất tại Bảng tin Thông báo (Carousel Banner) dạng thanh trượt ở đầu trang.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_023",
+        "category": "ky_thuat",
+        "question": "Làm thế nào để biết yêu cầu hỗ trợ (Ticket) của mình đã được nhà trường tiếp nhận và xử lý hay chưa?",
+        "answer": "Sinh viên có thể theo dõi tiến độ tại màn hình \"Lịch sử yêu cầu\". Tại đây có biểu đồ thống kê tổng quan tỉ lệ trạng thái các câu hỏi, đi kèm danh sách và được gán nhãn màu trực quan như đỏ, vàng, xanh.",
+        "likes": 0,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_024",
+        "category": "ky_thuat",
+        "question": "Nếu gặp thắc mắc về điểm thi, lịch học hoặc các thủ tục hành chính hành chính khác, tôi phải liên hệ với ai trên hệ thống?",
+        "answer": "Sinh viên có thể vào trang \"Gửi phản hồi\", Tại đây, bạn điền tiêu đề câu hỏi, điền nội dung và chọn phòng ban cần giải đáp.",
+        "likes": 0,
+        "dislikes": 0
     }
 ]

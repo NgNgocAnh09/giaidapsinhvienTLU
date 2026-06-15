@@ -18,6 +18,7 @@
  */
 
 const admin = require('firebase-admin');
+const { getFirestore } = require('firebase-admin/firestore');
 const fs = require('fs');
 const path = require('path');
 
@@ -38,11 +39,11 @@ if (!fs.existsSync(SERVICE_ACCOUNT_PATH)) {
 const serviceAccount = require(SERVICE_ACCOUNT_PATH);
 
 admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
+    credential: admin.cert(serviceAccount),
     projectId: "tlu-helpdesk-v2"
 });
 
-const db = admin.firestore();
+const db = getFirestore();
 
 // ========== HÀM UPLOAD DỮ LIỆU ==========
 
