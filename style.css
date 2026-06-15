@@ -1,75 +1,989 @@
-/* Thiết lập cơ bản */
-body { 
-    font-family: Arial, sans-serif; 
-    margin: 0; 
-    padding: 0; 
-    background-color: #f4f6f8; 
+/* ================================================================
+   CỔNG HỖ TRỢ HỌC VỤ TLU - STYLESHEET
+   TV1: App Shell, Login, Theme, Navigation
+   TV2: Banner, Search, Categories, FAQ Cards, Modal
+   ================================================================ */
+
+/* ========== GOOGLE FONTS ========== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ========== CSS VARIABLES ========== */
+:root {
+    --primary-color: #0056b3;
+    --primary-light: #e3f0ff;
+    --primary-dark: #003d80;
+    --bg-color: #f0f2f5;
+    --card-bg: #ffffff;
+    --text-color: #1a1a2e;
+    --text-secondary: #6b7280;
+    --border-color: #e5e7eb;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.07), 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.1), 0 4px 10px rgba(0,0,0,0.05);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+    --transition-bounce: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Thanh menu */
-nav { 
-    background: #00529c; 
-    padding: 15px; 
-    color: white; 
-    display: flex; 
-    gap: 20px; 
+/* ========== THEMES (TV1 + TV2 mở rộng) ========== */
+body.theme-blue {
+    --primary-color: #0056b3;
+    --primary-light: #e3f0ff;
+    --primary-dark: #003d80;
+}
+body.theme-pink {
+    --primary-color: #e91e63;
+    --primary-light: #fce4ec;
+    --primary-dark: #c2185b;
+}
+body.theme-orange {
+    --primary-color: #f57c00;
+    --primary-light: #fff3e0;
+    --primary-dark: #e65100;
+}
+body.theme-black {
+    --primary-color: #424242;
+    --primary-light: #f5f5f5;
+    --primary-dark: #212121;
 }
 
-nav a { 
-    color: white; 
-    text-decoration: none; 
-    cursor: pointer; 
-    font-weight: bold; 
+/* ========== RESET & BASE ========== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Container chính */
-#main-app-content { 
-    padding: 20px; 
-    max-width: 800px; 
-    margin: auto; 
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Thẻ câu hỏi (Card) */
-.faq-card { 
-    background: white; 
-    padding: 15px; 
-    margin-bottom: 15px; 
-    border-radius: 8px; 
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+/* ========== SCREEN MANAGEMENT (TV1) ========== */
+.screen-container { display: none; min-height: 100vh; }
+.screen-container.active { display: flex; flex-direction: column; }
+
+/* ================================================================
+   MÀN HÌNH ĐĂNG NHẬP (TV1)
+   ================================================================ */
+#login-screen {
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, var(--bg-color) 0%, var(--primary-light) 100%);
 }
 
-.faq-card h3 { 
-    margin-top: 0; 
-    color: #333; 
+.login-box {
+    background: var(--card-bg);
+    padding: 48px 40px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
 }
 
-.faq-category { 
-    display: inline-block; 
-    padding: 4px 8px; 
-    background: #e0e0e0; 
-    border-radius: 4px; 
-    font-size: 12px; 
-    margin-bottom: 10px; 
+.logo {
+    max-width: 90px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    box-shadow: var(--shadow-md);
 }
 
-/* Khu vực nút bấm */
-.faq-actions { 
-    display: flex; 
-    gap: 10px; 
-    margin-top: 15px; 
-    border-top: 1px solid #eee; 
-    padding-top: 10px; 
+.login-box h2 {
+    margin-bottom: 8px;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.5em;
 }
 
-.btn-action { 
-    padding: 6px 12px; 
-    border: none; 
-    border-radius: 4px; 
-    cursor: pointer; 
-    background: #e3f2fd; 
-    color: #0d47a1; 
+.login-box p {
+    color: var(--text-secondary);
+    font-size: 0.9em;
+    margin-bottom: 24px;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 14px 16px;
+    margin: 8px 0;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 0.95em;
+    transition: var(--transition);
+    outline: none;
+    background: #fafbfc;
+}
+
+.login-box input:focus {
+    border-color: var(--primary-color);
+    background: var(--card-bg);
+    box-shadow: 0 0 0 3px var(--primary-light);
+}
+
+.login-box button[type="submit"] {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1em;
+    margin-top: 16px;
+    transition: var(--transition);
+    letter-spacing: 0.3px;
+}
+
+.login-box button[type="submit"]:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.login-box button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+.error-msg {
+    color: var(--danger-color);
+    font-size: 0.85em;
+    margin-top: 12px;
+    min-height: 20px;
+}
+
+/* ================================================================
+   APP SHELL (TV1 + TV2 cải thiện)
+   ================================================================ */
+.app-header {
+    background: var(--primary-color);
+    color: white;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.header-title {
+    font-size: 1.15em;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.theme-switcher {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.theme-switcher button {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 2.5px solid rgba(255,255,255,0.7);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: var(--transition-fast);
+}
+
+.theme-switcher button:hover {
+    transform: scale(1.2);
+    border-color: white;
+}
+
+#logout-btn {
+    width: auto;
+    height: auto;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
+    margin-left: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-size: 0.8em;
+    font-weight: 500;
+    transition: var(--transition);
+    backdrop-filter: blur(4px);
+}
+
+#logout-btn:hover {
+    background: rgba(255,255,255,0.25);
+}
+
+#main-app-content {
+    flex: 1;
+    padding: 0;
+    overflow-y: auto;
+    margin-bottom: 64px;
+    scroll-behavior: smooth;
+}
+
+/* ================================================================
+   BOTTOM NAVIGATION (TV1 + TV2 cải thiện)
+   ================================================================ */
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--card-bg);
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    box-shadow: 0 -2px 15px rgba(0,0,0,0.08);
+    z-index: 100;
+    border-top: 1px solid var(--border-color);
+}
+
+.nav-item {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 12px 10px 10px;
+    font-weight: 600;
+    font-size: 0.8em;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.nav-item::before {
+    font-size: 1.3em;
+    display: block;
+}
+
+.nav-item[data-target="home"]::before { content: "🏠"; }
+.nav-item[data-target="saved"]::before { content: "🔖"; }
+.nav-item[data-target="history"]::before { content: "📋"; }
+
+.nav-item.active {
+    color: var(--primary-color);
+}
+
+.nav-item.active::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 20%;
+    right: 20%;
+    height: 3px;
+    background: var(--primary-color);
+    border-radius: 0 0 3px 3px;
+}
+
+.nav-item:hover {
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+/* ================================================================
+   TV2: BANNER CAROUSEL
+   ================================================================ */
+.banner-carousel {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.banner-track {
+    display: flex;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: transform;
+}
+
+.banner-slide {
+    min-width: 100%;
+    padding: 40px 28px 48px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 180px;
+    color: white;
+}
+
+.banner-slide::after {
+    content: "";
+    position: absolute;
+    top: -30%;
+    right: -10%;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    pointer-events: none;
+}
+
+.banner-slide::before {
+    content: "";
+    position: absolute;
+    bottom: -20%;
+    left: -5%;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    pointer-events: none;
+}
+
+.banner-icon {
+    font-size: 2em;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.banner-title {
+    font-size: 1.2em;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    line-height: 1.4;
+    position: relative;
+    z-index: 1;
+}
+
+.banner-subtitle {
+    font-size: 0.85em;
+    opacity: 0.9;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+}
+
+.banner-dots {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 2;
+}
+
+.banner-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: var(--transition);
+    border: none;
+    padding: 0;
+}
+
+.banner-dot.active {
+    background: white;
+    width: 24px;
+    border-radius: 4px;
+}
+
+/* ================================================================
+   TV2: SEARCH BAR
+   ================================================================ */
+.search-container {
+    padding: 20px 20px 8px;
+    position: relative;
+}
+
+#faq-search {
+    width: 100%;
+    padding: 16px 20px 16px 48px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    font-size: 0.95em;
+    background: var(--card-bg);
+    color: var(--text-color);
+    transition: var(--transition);
+    outline: none;
+    box-shadow: var(--shadow-sm);
+}
+
+#faq-search:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light), var(--shadow-md);
+}
+
+.search-container::before {
+    content: "🔍";
+    position: absolute;
+    left: 38px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1em;
+    pointer-events: none;
+    margin-top: 6px;
+}
+
+#faq-search::placeholder {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+
+/* ================================================================
+   TV2: CATEGORY GRID
+   ================================================================ */
+.category-grid {
+    display: flex;
+    gap: 8px;
+    padding: 16px 20px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    scroll-snap-type: x mandatory;
+}
+
+.category-grid::-webkit-scrollbar {
+    display: none;
+}
+
+.cat-item {
+    flex-shrink: 0;
+    padding: 10px 18px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-xl);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 0.82em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    white-space: nowrap;
+    scroll-snap-align: start;
+    box-shadow: var(--shadow-sm);
+}
+
+.cat-item:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+}
+
+.cat-item.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ================================================================
+   TV2: FAQ LIST & CARDS
+   ================================================================ */
+.faq-list {
+    padding: 12px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.faq-card {
+    background: var(--card-bg);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    cursor: pointer;
+    transition: var(--transition);
+    box-shadow: var(--shadow-sm);
+    border-left: 4px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+    animation: fadeInUp 0.4s ease-out backwards;
+}
+
+.faq-card::after {
+    content: "→";
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2em;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    opacity: 0;
+}
+
+.faq-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-left-color: var(--primary-dark);
+}
+
+.faq-card:hover::after {
+    opacity: 1;
+    right: 14px;
+}
+
+.faq-card:active {
+    transform: translateY(0);
+}
+
+.faq-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    gap: 10px;
+}
+
+.faq-question {
+    font-size: 0.95em;
+    font-weight: 600;
+    color: var(--text-color);
+    line-height: 1.5;
+    flex: 1;
+    padding-right: 24px;
+}
+
+.faq-category-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: var(--radius-xl);
+    font-size: 0.7em;
+    font-weight: 600;
+    background: var(--primary-light);
+    color: var(--primary-color);
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.faq-meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 6px;
+    font-size: 0.78em;
+    color: var(--text-secondary);
+}
+
+.faq-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Empty & Loading States */
+.faq-empty {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-secondary);
+    animation: fadeIn 0.3s ease;
+}
+
+.faq-empty-icon {
+    font-size: 3em;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+.faq-empty-text {
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+.faq-loading {
+    text-align: center;
+    padding: 48px 20px;
+    color: var(--text-secondary);
+}
+
+.loading-spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 12px;
+}
+
+/* ================================================================
+   TV2: MODAL POPUP
+   ================================================================ */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 20px;
+    animation: fadeIn 0.2s ease;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    width: 100%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: var(--shadow-xl);
+}
+
+.modal-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--bg-color);
+    border-radius: 50%;
+    font-size: 1.3em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: var(--transition);
+    z-index: 2;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    background: var(--danger-color);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.modal-header {
+    padding: 24px 24px 0;
+}
+
+.modal-category-badge {
+    display: inline-block;
+    padding: 5px 14px;
+    border-radius: var(--radius-xl);
+    font-size: 0.78em;
+    font-weight: 600;
+    background: var(--primary-light);
+    color: var(--primary-color);
+}
+
+.modal-question {
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--text-color);
+    line-height: 1.5;
+    padding: 16px 24px 12px;
+}
+
+.modal-answer {
+    padding: 0 24px 16px;
+    font-size: 0.92em;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    white-space: pre-line;
+}
+
+.modal-answer p {
+    margin-bottom: 8px;
+}
+
+/* TV3: Audio Player Container */
+.modal-audio {
+    padding: 0 24px 16px;
+}
+
+.btn-audio {
+    width: 100%;
+    padding: 12px 20px;
+    border: 2px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-color);
+    color: var(--text-secondary);
+    font-size: 0.88em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-audio:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--primary-light);
+}
+
+/* Modal Actions */
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px 24px;
+    border-top: 1px solid var(--border-color);
+    gap: 12px;
+}
+
+.btn-action {
+    padding: 10px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    color: var(--text-color);
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .btn-action:hover {
-    background: #bbdefb;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: var(--primary-light);
 }
+
+.btn-action.saved {
+    border-color: var(--warning-color);
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.rating-group {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-rate {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--card-bg);
+    font-size: 0.85em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition-bounce);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--text-color);
+}
+
+.btn-rate:hover {
+    transform: scale(1.05);
+}
+
+.btn-like:hover,
+.btn-like.voted {
+    border-color: var(--success-color);
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.btn-dislike:hover,
+.btn-dislike.voted {
+    border-color: var(--danger-color);
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-rate.voted {
+    pointer-events: none;
+}
+
+.btn-rate.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* ================================================================
+   TV2: TOAST NOTIFICATIONS
+   ================================================================ */
+.toast-container {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.toast {
+    background: var(--text-color);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-xl);
+    font-size: 0.85em;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    animation: toastIn 0.3s ease, toastOut 0.3s ease 2.5s forwards;
+    white-space: nowrap;
+    pointer-events: auto;
+}
+
+/* ================================================================
+   ANIMATIONS
+   ================================================================ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes toastOut {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+/* ================================================================
+   RESPONSIVE
+   ================================================================ */
+@media (min-width: 768px) {
+    .modal-overlay {
+        align-items: center;
+    }
+
+    .modal-content {
+        border-radius: var(--radius-lg);
+        max-height: 80vh;
+    }
+
+    .banner-slide {
+        min-height: 220px;
+        padding: 48px 40px 56px;
+    }
+
+    .banner-title {
+        font-size: 1.4em;
+    }
+
+    .category-grid {
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .faq-list {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 400px) {
+    .banner-slide {
+        padding: 28px 20px 40px;
+        min-height: 150px;
+    }
+
+    .banner-title {
+        font-size: 1em;
+    }
+
+    .modal-question {
+        font-size: 1.05em;
+    }
+
+    .cat-item {
+        padding: 8px 14px;
+        font-size: 0.78em;
+    }
+
+    .theme-switcher button {
+        width: 20px;
+        height: 20px;
+    }
+
+    .header-title {
+        font-size: 1em;
+    }
+}
+
+/* Staggered animation delays for FAQ cards */
+.faq-card:nth-child(1) { animation-delay: 0s; }
+.faq-card:nth-child(2) { animation-delay: 0.05s; }
+.faq-card:nth-child(3) { animation-delay: 0.1s; }
+.faq-card:nth-child(4) { animation-delay: 0.15s; }
+.faq-card:nth-child(5) { animation-delay: 0.2s; }
+.faq-card:nth-child(6) { animation-delay: 0.25s; }
+.faq-card:nth-child(7) { animation-delay: 0.3s; }
+.faq-card:nth-child(8) { animation-delay: 0.35s; }
+.faq-card:nth-child(9) { animation-delay: 0.4s; }
+.faq-card:nth-child(10) { animation-delay: 0.45s; }
+.faq-card:nth-child(11) { animation-delay: 0.5s; }

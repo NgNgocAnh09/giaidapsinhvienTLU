@@ -3,22 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng hỗ trợ học vụ TLU</title>
+    <title>Cổng Hỗ Trợ Học Vụ TLU</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-
-    <nav>
-        <a>Trang chủ</a>
-        <a>Đã lưu</a>
-        <a>Lịch sử</a>
-    </nav>
-
-    <div id="main-app-content">
-        <h2>Danh sách câu hỏi thường gặp</h2>
-        <div id="faq-list"></div>
+<body class="theme-blue"> <div id="login-screen" class="screen-container active">
+        <div class="login-box">
+            <img src="https://inkythuatso.com/uploads/thumbnails/800/2021/12/logo-dai-hoc-thuy-loi-inkythuatso-converted-01-23-08-45-05.jpg" alt="TLU Logo" class="logo">
+            <h2>Đăng nhập Hệ thống</h2>
+            <p>Sử dụng email sinh viên @tlu.edu.vn</p>
+            
+            <form id="login-form">
+                <input type="email" id="email" placeholder="MãSinhVien@tlu.edu.vn" required>
+                <input type="password" id="password" placeholder="Mật khẩu" required>
+                <button type="submit" id="login-btn">Đăng nhập</button>
+                <p id="login-error" class="error-msg"></p>
+            </form>
+        </div>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <div id="app-shell" class="screen-container">
+        <header class="app-header">
+            <div class="header-title">TLU Helpdesk</div>
+            <div class="theme-switcher">
+                <button onclick="changeTheme('theme-blue')" style="background: #0056b3;"></button>
+                <button onclick="changeTheme('theme-pink')" style="background: #e91e63;"></button>
+                <button onclick="changeTheme('theme-orange')" style="background: #ff9800;"></button>
+                <button onclick="changeTheme('theme-black')" style="background: #333333;"></button>
+                <button id="logout-btn">Đăng xuất</button>
+            </div>
+        </header>
+
+        <main id="main-app-content">
+            <h2>Chào mừng bạn đến với Cổng hỗ trợ học vụ</h2>
+            <p>Nội dung</p>
+        </main>
+
+        <nav class="bottom-nav">
+            <button class="nav-item active" data-target="home">Trang chủ</button>
+            <button class="nav-item" data-target="saved">Đã lưu</button>
+            <button class="nav-item" data-target="history">Lịch sử</button>
+        </nav>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- TV2: FAQ DETAIL MODAL POPUP                  -->
+    <!-- ============================================ -->
+    <div class="modal-overlay" id="faq-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-header">
+                <span class="modal-category-badge" id="modal-category"></span>
+            </div>
+            <h3 class="modal-question" id="modal-question"></h3>
+            <div class="modal-answer" id="modal-answer"></div>
+
+            <!-- TV3: Audio Player (TV3 sẽ implement logic playAudio) -->
+            <div class="modal-audio" id="modal-audio-container">
+                <button class="btn-audio" id="btn-play-audio" title="Nghe AI đọc">
+                    🔊 Nghe AI đọc
+                </button>
+            </div>
+
+            <!-- Modal Actions: Bookmark + Rating -->
+            <div class="modal-actions">
+                <button class="btn-action" id="btn-bookmark" title="Lưu câu hỏi">
+                    🔖 Lưu
+                </button>
+                <div class="rating-group">
+                    <button class="btn-rate btn-like" id="btn-like">
+                        👍 <span id="like-count">0</span>
+                    </button>
+                    <button class="btn-rate btn-dislike" id="btn-dislike">
+                        👎 <span id="dislike-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TV2: Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script type="module" src="app.js"></script>
 </body>
 </html>
