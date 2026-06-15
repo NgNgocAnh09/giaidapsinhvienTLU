@@ -3,13 +3,13 @@ import { getFirestore, doc, writeBatch } from "https://www.gstatic.com/firebasej
 
 // TODO: Dán Firebase Config của bạn vào đây
 const firebaseConfig = {
-    apiKey: "AIzaSyCWZcHrLCUaOWWtYXC2ycbOD6zt8UvtHCI",
-    authDomain: "academichelp-b46a9.firebaseapp.com",
-    projectId: "academichelp-b46a9",
-    storageBucket: "academichelp-b46a9.firebasestorage.app",
-    messagingSenderId: "28713916600",
-    appId: "1:28713916600:web:f6f07d726d9395d16c7c4d",
-    measurementId: "G-B6WBR6G9CV"
+    apiKey: "AIzaSyAPMC0P8vXHt4a1E1f6wx0URYB2wexHqcY",
+    authDomain: "tlu-helpdesk-v2.firebaseapp.com",
+    projectId: "tlu-helpdesk-v2",
+    storageBucket: "tlu-helpdesk-v2.firebasestorage.app",
+    messagingSenderId: "834033095788",
+    appId: "1:834033095788:web:096ae7bbe727ce406cf449",
+    measurementId: "G-4FEF7ZL2G1"
 };
 
 // Khởi tạo Firebase
