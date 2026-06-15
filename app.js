@@ -153,8 +153,8 @@ async function loadFAQsFromFirestore() {
     try {
         const querySnapshot = await getDocs(collection(db, "faqs"));
         if (querySnapshot.empty) {
-            console.warn("⚠️ Firestore FAQs trống → dùng dữ liệu mẫu");
-            return [...SAMPLE_FAQS];
+            console.warn("⚠️ Firestore FAQs trống");
+            return [];
         }
         const faqs = [];
         querySnapshot.forEach((docSnap) => {
@@ -163,8 +163,8 @@ async function loadFAQsFromFirestore() {
         console.log(`✅ Đã tải ${faqs.length} FAQ từ Firestore`);
         return faqs;
     } catch (error) {
-        console.warn("⚠️ Lỗi Firestore, dùng dữ liệu mẫu:", error.message);
-        return [...SAMPLE_FAQS];
+        console.warn("⚠️ Lỗi Firestore:", error.message);
+        return [];
     }
 }
 
@@ -172,7 +172,7 @@ async function loadBannersFromFirestore() {
     try {
         const querySnapshot = await getDocs(collection(db, "banners"));
         if (querySnapshot.empty) {
-            return [...SAMPLE_BANNERS];
+            return [];
         }
         const banners = [];
         querySnapshot.forEach((docSnap) => {
@@ -182,7 +182,7 @@ async function loadBannersFromFirestore() {
         return banners;
     } catch (error) {
         console.warn("⚠️ Lỗi load banners:", error.message);
-        return [...SAMPLE_BANNERS];
+        return [];
     }
 }
 
