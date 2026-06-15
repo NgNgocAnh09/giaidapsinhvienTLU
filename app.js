@@ -24,236 +24,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ================================================================
-// TV2: DỮ LIỆU MẪU (FALLBACK KHI FIRESTORE CHƯA SẴN SÀNG)
-// ================================================================
-const SAMPLE_BANNERS = [
-    {
-        id: "banner_001",
-        icon: "🚨",
-        title: "Hạn đóng học phí HK2 năm học 2025-2026",
-        subtitle: "Hạn cuối: 30/06/2026 — Vui lòng hoàn thành trước thời hạn",
-        gradient: "linear-gradient(135deg, #ff416c, #ff4b2b)",
-        urgent: true
-    },
-    {
-        id: "banner_002",
-        icon: "📅",
-        title: "Đăng ký học phần HK1 năm 2026-2027",
-        subtitle: "Thời gian đăng ký: 01/07 — 15/07/2026",
-        gradient: "linear-gradient(135deg, #667eea, #764ba2)"
-    },
-    {
-        id: "banner_003",
-        icon: "🎓",
-        title: "Thông báo xét tốt nghiệp đợt tháng 9/2026",
-        subtitle: "Nộp hồ sơ từ 01/08 — 15/08/2026 tại Phòng Đào tạo",
-        gradient: "linear-gradient(135deg, #11998e, #38ef7d)"
-    },
-    {
-        id: "banner_004",
-        icon: "🏅",
-        title: "Chương trình Học bổng Tài năng TLU 2026",
-        subtitle: "Đang mở đơn đăng ký — Hạn nộp: 20/07/2026",
-        gradient: "linear-gradient(135deg, #f093fb, #f5576c)"
-    }
-];
-
-const SAMPLE_FAQS = [
-    {
-        faq_id: "faq_001",
-        category: "tin_chi",
-        question: "Làm thế nào để đăng ký tín chỉ trực tuyến và thời gian đăng ký thường vào lúc nào?",
-        answer: "Sinh viên đăng ký tín chỉ trực tuyến qua web https://sinhvien1.tlu.edu.vn/ thời gian sẽ được phòng Đào Tạo thông báo, lịch đăng ký sẽ chia theo từng khóa",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_002",
-        category: "tin_chi",
-        question: "Hạn hủy hoặc rút bớt học phần/tín chỉ đã đăng ký là khi nào và thủ tục ra sao?",
-        answer: "Sinh viên có thể hủy học phần đăng ký trong 2 tuần đầu của giai đoạn học, sinh viên lên Phòng Đào Tạo nhà A4 để hủy học phần",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_003",
-        category: "tin_chi",
-        question: "Số lượng tín chỉ tối thiểu và tối đa được phép đăng ký?",
-        answer: "Khối lượng tối thiểu không ít hơn 11 tín và tối đa không vượt quá 26 tín, trong 1 vài trường hợp đặc biệt ( sinh viên có sức khỏe yếu, sinh viên học 2 văn bằng,....) nhà trường sẽ xem xét điều chỉnh giới hạn khối lượng học tập cho sinh viên",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_004",
-        category: "tin_chi",
-        question: "Tổng số tín chỉ của các ngành học là bao nhiêu?",
-        answer: "Quy chế phân định trình độ năm học của sinh viên dựa trên số tín chỉ tích lũy tăng dần qua từng năm. Qua đó, bạn có thể thấy được tổng số tín chỉ thiết kế tối đa cho toàn khóa của từng nhóm ngành:  \n\nNhóm ngành Kinh tế, Kinh doanh và Quản lý, Ngôn ngữ:\n\nSinh viên năm thứ nhất: Tích lũy dưới 35 tín chỉ.  \n\nSinh viên năm thứ hai: Tích lũy từ 35 đến 70 tín chỉ.  \n\nSinh viên năm thứ ba: Tích lũy từ 71 đến 102 tín chỉ.  \n\nSinh viên năm thứ tư: Tích lũy từ 103 đến 130 tín chỉ.(Khung chương trình đào tạo của nhóm ngành này được thiết kế tối đa quanh mốc 130 tín chỉ ).  \n\nNhóm ngành Kỹ thuật, Công nghệ, Quản lý xây dựng:\n\nSinh viên năm thứ nhất: Tích lũy dưới 37 tín chỉ.  \n\nSinh viên năm thứ hai: Tích lũy từ 37 đến 72 tín chỉ.  \n\nSinh viên năm thứ ba: Tích lũy từ 73 đến 108 tín chỉ.  \n\nSinh viên năm thứ tư: Tích lũy từ 109 đến 142 tín chỉ.  \n\nSinh viên năm thứ năm: Tích lũy từ 143 tín chỉ trở lên.(Khung chương trình đào tạo của nhóm ngành này được thiết kế dài hơn, đạt từ 143 tín chỉ trở lên )",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_005",
-        category: "tin_chi",
-        question: "Quy định về việc học lại và học cải thiện?",
-        answer: "Đối với học phần bắt buộc thì sinh viên phải đăng ký lại chính học phần đó, học phần tự chọn thì sinh viên có thể chọn học lại học phần đó hoặc chọn 1 học phần khác, học lại thì không quá 6% tổng số tín sẽ không bị hạ bằng còn học cải thiện không giới hạn",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_006",
-        category: "hoc_phi",
-        question: "Đóng học phí chậm có bị sao không ?",
-        answer: "Sinh viên thực hiện không theo đúng quy định về nộp học phí sẽ bị xử lý như sau:\n- Đối với sinh viên đang học các môn học: Khóa tài khoản đăng ký học ít nhất 01 học kỳ cho đến khi sinh viên hoàn thành học phí;\n- Đối với sinh viên đang trong thời gian thực hiện Học phần tốt nghiệp: Sinh viên không được bảo vệ Học phần tốt nghiệp. Sinh viên chỉ được bảo vệ Học phần tốt nghiệp cùng với các đợt sau (theo kế hoạch trường tổ chức) nếu đã hoàn thành học phí.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_007",
-        category: "hoc_phi",
-        question: "Thời gian thu học phí là khi nào ?",
-        answer: "- Học phí của học kỳ chính và học kỳ thực hiện Học phần tốt nghiệp được thu một lần vào tuần học thứ tư của mỗi giai đoạn học. \n- Học phí của học kỳ song song với học kỳ chính, học kỳ hè được thu vào tuần học thứ hai của mỗi kỳ học",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_008",
-        category: "hoc_phi",
-        question: "Những ai được giảm học phí ?",
-        answer: "- Đối tượng được giảm 70% học phí: Sinh viên người dân tộc thiểu số (không phải là người dân tộc thiểu số rất ít người) ở thôn/bản đặc biệt khó khăn, xã khu vực III vùng dân tộc và miền núi, xã đặc biệt khó khăn vùng bãi ngang ven biển hải đảo theo quy định của cơ quan có thẩm quyền.\n- Đối tượng được giảm 50% học phí: Sinh viên là con cán bộ, công chức, viên chức, công nhân mà cha hoặc mẹ bị tai nạn lao động hoặc mắc bệnh nghề nghiệp được hưởng trợ cấp thường xuyên.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_009",
-        category: "hoc_phi",
-        question: "Những ai được miễn học phí ?",
-        answer: "- Đối tượng 1: Sinh viên thuộc đối tượng theo quy định tại Pháp lệnh Ưu đãi người có công với cách mạng\n- Đối tượng 2: Sinh viên bị khuyết tật.\n- Đối tượng 3: Sinh viên (tuổi không quá 22) không có nguồn nuôi dưỡng thuộc đối tượng hưởng trợ cấp xã hội hàng tháng theo quy định tại khoản 1 và 2 Điều 5 Nghị định số 20/2021/NĐ-CP ngày 15/3/2021 của Chính phủ.\n- Đối tượng 4: Sinh viên là người dân tộc thiểu có cha hoặc mẹ hoặc cả cha và mẹ hoặc ông bà (trong trường hợp ở với ông bà) thuộc hộ nghèo và hộ cận nghèo theo quy định của Thủ tướng Chính phủ.\n- Đối tượng 5: Sinh viên người dân tộc thiểu số rất ít người (Cống, Mảng, Pu Péo, Si La, Cờ Lao, Bố Y, La Ha, Ngái, Chứt, Ơ Đu, Brâu, Rơ Măm, Lô Lô, Lự, Pà Thẻn, La Hủ) ở vùng có điều kiện kinh tế - xã hội khó khăn hoặc đặc biệt khó khăn\n- Đối tượng 6: Sinh viên hệ cử tuyển.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_010",
-        category: "hoc_phi",
-        question: "Con của người có công với cách mạng muốn nộp hồ sơ miễn học phí thì cần những giấy tờ gì ?",
-        answer: "Hồ sơ cần nộp bao gồm:\n1/ Đơn đề nghị  miễn giảm học phí \n2/ Bản sao Giấy khai sinh;\n3/ Giấy xác nhận của cơ quan quản lý đối tượng người có công có con thuộc diện miễn giảm học phí;\n4/ Bản sao thẻ Thương bệnh binh của bố/mẹ (nếu có).",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_011",
-        category: "khao_thi",
-        question: "Tôi bị trùng lịch thi hai môn vào cùng một ca thi thì phải làm thế nào để xin hoãn thi?",
-        answer: "Trường hợp bị trùng lịch thi, sinh viên làm Đơn xin hoãn thi (theo mẫu tại văn phòng Khoa/Phòng Khảo thí) và nộp minh chứng lịch thi bị trùng trước ngày thi ít nhất 3 ngày làm việc. Nhà trường sẽ xem xét giải quyết cho sinh viên thi bổ sung vào đợt thi phụ hoặc ghép với khóa sau.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_012",
-        category: "khao_thi",
-        question: "Sau khi công bố điểm thi, nếu muốn phúc khảo (chấm phúc tra) bài thi tự luận thì nộp đơn ở đâu và hạn chót là khi nào?",
-        answer: "Sinh viên nộp Đơn xin phúc khảo bài thi tại Phòng Khảo thí và Đảm bảo chất lượng (tầng 1, toà A4). Thời hạn nhận đơn phúc khảo là trong vòng 7 ngày làm việc kể từ ngày phòng Khảo thí công bố điểm thi chính thức trên hệ thống. Lệ phí phúc khảo tính theo quy định hiện hành của nhà trường.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_013",
-        category: "khao_thi",
-        question: "Đang làm bài thi trắc nghiệm cuối kỳ trên máy tính mà hệ thống bị sập hoặc máy bị mất mạng thì điểm số được tính thế nào?",
-        answer: "Khi gặp sự cố kỹ thuật (mất mạng, sập nguồn máy tính), sinh viên phải giữ nguyên vị trí và báo ngay cho Cán bộ coi thi (giám thị). Giám thị sẽ lập biên bản xác nhận sự cố, phối hợp với kỹ thuật viên để khôi phục lại lượt thi (giữ nguyên thời gian và các câu đã làm) hoặc bố trí cho sinh viên làm lại bài thi bằng đề dự phòng.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_014",
-        category: "khao_thi",
-        question: "Thời hạn nộp chứng chỉ tiếng Anh quốc tế (IELTS/TOEIC) để xét miễn thi học phần tiếng Anh hoặc xét tốt nghiệp là khi nào?",
-        answer: "Nhà trường tiếp nhận chứng chỉ tiếng Anh quốc tế (còn thời hạn 2 năm) theo các đợt trong năm học. Để xét miễn thi học phần, sinh viên nộp trước tuần học thứ 2 của học kỳ. Để xét tốt nghiệp, sinh viên phải nộp chứng chỉ chậm nhất là 4 tuần trước khi Hội đồng xét tốt nghiệp họp (theo thông báo cụ thể của từng đợt tốt nghiệp).",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_015",
-        category: "khao_thi",
-        question: "Đến ngày thi mà tôi bị mất thẻ sinh viên thì có được vào phòng thi không và cần mang giấy tờ gì thay thế?",
-        answer: "Sinh viên bị mất thẻ sinh viên vẫn được vào phòng thi nếu xuất trình được một trong các giấy tờ tùy thân có dán ảnh hợp lệ như: Căn cước công dân (CCCD), Hộ chiếu, hoặc Giấy phép lái xe. Đồng thời, sinh viên cần chủ động liên hệ Phòng Công tác chính trị & Quản lý sinh viên để làm thủ tục cấp lại thẻ trước đợt thi tiếp theo.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_016",
-        category: "hanh_chinh",
-        question: "Làm thế nào để xin cấp Giấy chứng nhận sinh viên (để làm vé xe buýt, hoãn nghĩa vụ quân sự...)?",
-        answer: "Sinh viên đăng ký trực tuyến qua cổng thông tin sinh viên hoặc ứng dụng của trường (hoặc nộp form tại Phòng Công tác chính trị và Quản lý sinh viên). Sau khi hệ thống xác nhận, sinh viên nhận giấy hẹn và đến lấy kết quả trực tiếp tại phòng chức năng theo đúng thời gian quy định.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_017",
-        category: "hanh_chinh",
-        question: "Rút lại học bạ hoặc bằng tốt nghiệp THPT chính thức đã nộp khi nhập học thì cần làm những thủ tục gì?",
-        answer: "Sinh viên mang theo Thẻ sinh viên hoặc Căn cước công dân đến Phòng Đào tạo. Tại đây, sinh viên điền vào mẫu đơn xin rút hồ sơ/văn bằng, nêu rõ lý do (ví dụ: mượn đi công chứng, thôi học...). Sau khi được Ban Giám hiệu phê duyệt, phòng Đào tạo sẽ bàn giao lại giấy tờ gốc và ký biên bản giao nhận.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_018",
-        category: "hanh_chinh",
-        question: "Mất thẻ sinh viên thì phải làm thủ tục cấp lại ở đâu và lệ phí như thế nào?",
-        answer: "Sinh viên đến Phòng Công tác chính trị và Quản lý sinh viên để làm thủ tục xin cấp lại thẻ. Tại đây, bạn sẽ điền form đề nghị cấp lại thẻ sinh viên, nộp kèm 1 ảnh 3x4 và đóng lệ phí cấp lại theo quy định của nhà trường. Thời gian nhận lại thẻ mới thường từ 5 - 7 ngày làm việc.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_019",
-        category: "hanh_chinh",
-        question: "Nếu bản thân bị ốm hoặc có việc gia đình đột xuất phải nghỉ học nhiều ngày thì cần làm thủ tục xin phép như thế nào để không bị tính là nghỉ tự do?",
-        answer: "Sinh viên phải làm Đơn xin nghỉ học tạm thời (có chữ ký xác nhận của phụ huynh nếu nghỉ dài ngày) kèm theo minh chứng hợp pháp (như giấy ra viện, giấy xác nhận của bệnh viện nếu nghỉ ốm). Đơn nộp về Văn phòng Khoa quản lý ngành học của sinh viên và gửi bản sao cho giảng viên bộ môn để được xem xét hoãn thi hoặc không bị cấm thi do nghỉ quá số buổi.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_020",
-        category: "hanh_chinh",
-        question: "Nếu phát hiện thông tin cá nhân (Họ tên, ngày sinh, quê quán, số CCCD...) trên hệ thống quản lý sinh viên của trường bị sai thì cần gặp ai để sửa?",
-        answer: "Sinh viên cần mang theo Thẻ sinh viên và bản sao công chứng các giấy tờ pháp lý liên quan (Giấy khai sinh, CCCD) đến phòng Đào tạo để làm thủ tục đính chính. Việc chỉnh sửa thông tin cần được thực hiện càng sớm càng tốt để tránh ảnh hưởng đến việc làm bằng tốt nghiệp và các giấy tờ hành chính sau này.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_021",
-        category: "ky_thuat",
-        question: "Nếu quên mật khẩu để đăng nhập thì sao?",
-        answer: "Sinh viên có thể nhấn nút \"Quên mật khẩu\" ngay tại form đăng nhập để hệ thống kích hoạt luồng xác thực và gửi liên kết đặt lại mật khẩu về email khôi phục.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_022",
-        category: "ky_thuat",
-        question: "Làm sao để cập nhật nhanh nhất các thông báo khẩn cấp của nhà trường như lịch nghỉ học, hạn đóng học phí?",
-        answer: "Ngay khi truy cập vào Màn hình Trang chủ (Home Tab), sinh viên sẽ thấy hệ thống tự động hiển thị các thông tin quan trọng nhất tại Bảng tin Thông báo (Carousel Banner) dạng thanh trượt ở đầu trang.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_023",
-        category: "ky_thuat",
-        question: "Làm thế nào để biết yêu cầu hỗ trợ (Ticket) của mình đã được nhà trường tiếp nhận và xử lý hay chưa?",
-        answer: "Sinh viên có thể theo dõi tiến độ tại màn hình \"Lịch sử yêu cầu\". Tại đây có biểu đồ thống kê tổng quan tỉ lệ trạng thái các câu hỏi, đi kèm danh sách và được gán nhãn màu trực quan như đỏ, vàng, xanh.",
-        likes: 0,
-        dislikes: 0
-    },
-    {
-        faq_id: "faq_024",
-        category: "ky_thuat",
-        question: "Nếu gặp thắc mắc về điểm thi, lịch học hoặc các thủ tục hành chính hành chính khác, tôi phải liên hệ với ai trên hệ thống?",
-        answer: "Sinh viên có thể vào trang \"Gửi phản hồi\", Tại đây, bạn điền tiêu đề câu hỏi, điền nội dung và chọn phòng ban cần giải đáp.",
-        likes: 0,
-        dislikes: 0
-    }
-];
-
 // Tên danh mục để hiển thị
 const CATEGORY_NAMES = {
     "all": "Tất cả",
@@ -1068,3 +838,97 @@ window.refreshList = function () {
 // KHỞI TẠO KHI DOM READY
 // ================================================================
 initModalListeners();
+
+// ================================================================
+// TV3: AI GIỌNG NÓI & XỬ LÝ ÂM THANH (Tuấn Hiệp)
+// ================================================================
+
+// 1. Biến toàn cục để theo dõi tiến trình phát nhạc (giúp fix bug âm thanh ma)
+let currentAudioPlayer = null;
+
+// 2. Link API Cloud Functions chính thức của bạn
+const TTS_API_URL = "https://asia-southeast1-tribal-sunbeam-474413-q8.cloudfunctions.net/text_to_speech_api";
+
+// 3. Hàm gọi AI đọc văn bản
+window.playAudio = async function(faq) {
+    if (!faq || !faq.answer) return;
+
+    const btnAudio = document.getElementById('btn-play-audio');
+    
+    // Nếu nhạc đang phát mà người dùng bấm lần nữa -> Coi như lệnh Dừng (Pause)
+    if (currentAudioPlayer && !currentAudioPlayer.paused) {
+        window.stopAudio();
+        return;
+    }
+
+    // Tránh việc click liên tục spam request lên server khi đang tải
+    if (btnAudio.classList.contains('loading')) {
+        window._showToast('⏳ Đang tạo âm thanh, vui lòng đợi...');
+        return;
+    }
+
+    // Hiển thị trạng thái đang tải
+    btnAudio.innerHTML = '⏳ Đang tạo giọng nói...';
+    btnAudio.classList.add('loading');
+
+    try {
+        // Gửi nội dung câu trả lời lên Google Cloud Functions
+        const response = await fetch(TTS_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: faq.answer })
+        });
+
+        const data = await response.json();
+        
+        if (data.audio_url) {
+            console.log("✅ Đã nhận link MP3 từ Storage:", data.audio_url);
+            
+            // Khởi tạo Audio Player với link MP3 trả về
+            currentAudioPlayer = new Audio(data.audio_url);
+            
+            // Sự kiện khi bắt đầu phát nhạc
+            currentAudioPlayer.onplay = () => {
+                btnAudio.innerHTML = '⏹️ Đang phát... (Click để dừng)';
+                btnAudio.classList.remove('loading');
+                btnAudio.classList.add('playing');
+                // Hiệu ứng nhấp nháy cho nút (tùy chọn)
+                btnAudio.style.animation = 'pulse 1.5s infinite';
+            };
+
+            // Sự kiện khi đọc xong tự động reset nút
+            currentAudioPlayer.onended = () => {
+                window.stopAudio();
+            };
+
+            // Bắt đầu phát
+            currentAudioPlayer.play();
+            
+        } else {
+            window._showToast('❌ Lỗi tạo âm thanh: ' + (data.error || 'Server không phản hồi'));
+            window.stopAudio(); // Reset trạng thái nút
+        }
+    } catch (error) {
+        console.error("Lỗi kết nối TTS API:", error);
+        window._showToast('❌ Không thể kết nối máy chủ AI Giọng nói');
+        window.stopAudio(); // Reset trạng thái nút
+    }
+};
+
+// 4. Hàm Dừng Âm Thanh (Dùng để bắt sự kiện tắt Modal - Fix lỗi "Âm thanh ma")
+window.stopAudio = function() {
+    // Nếu có nhạc đang phát thì ép dừng và tua về 0
+    if (currentAudioPlayer) {
+        currentAudioPlayer.pause();
+        currentAudioPlayer.currentTime = 0;
+        currentAudioPlayer = null;
+    }
+    
+    // Reset lại giao diện của nút Nghe AI
+    const btnAudio = document.getElementById('btn-play-audio');
+    if (btnAudio) {
+        btnAudio.innerHTML = '🔊 Nghe AI đọc';
+        btnAudio.classList.remove('playing', 'loading');
+        btnAudio.style.animation = 'none';
+    }
+};
