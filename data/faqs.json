@@ -1,0 +1,90 @@
+[
+    {
+        "faq_id": "faq_001",
+        "category": "hoc_phi",
+        "question": "Làm sao để nộp học phí qua ứng dụng ngân hàng?",
+        "answer": "Sinh viên thực hiện chuyển khoản vào tài khoản của nhà trường theo hướng dẫn sau:\n\n1. Mở ứng dụng ngân hàng (Vietcombank, BIDV, Agribank, ...)\n2. Chọn mục \"Chuyển khoản\"\n3. Nhập số tài khoản: 1234567890 — Ngân hàng Vietcombank\n4. Nội dung chuyển khoản: [Mã SV] - [Họ tên] - Nộp học phí HK2\n5. Kiểm tra lại thông tin và xác nhận\n\nLưu ý: Giữ lại biên lai giao dịch để đối chiếu khi cần thiết. Học phí sẽ được cập nhật trong vòng 3-5 ngày làm việc.",
+        "likes": 45,
+        "dislikes": 3
+    },
+    {
+        "faq_id": "faq_002",
+        "category": "hoc_phi",
+        "question": "Hạn cuối đóng học phí học kỳ 2 là khi nào?",
+        "answer": "Hạn cuối đóng học phí Học kỳ 2 năm học 2025-2026 là ngày 30/06/2026.\n\nSinh viên chưa hoàn thành nghĩa vụ học phí sẽ:\n• Không được xem điểm thi\n• Không được đăng ký học phần kỳ tiếp theo\n• Bị tạm khóa tài khoản sinh viên\n\nTrường hợp khó khăn tài chính, liên hệ Phòng Tài chính Kế toán để được hỗ trợ phương án đóng học phí theo đợt.",
+        "likes": 32,
+        "dislikes": 1
+    },
+    {
+        "faq_id": "faq_003",
+        "category": "hoc_phi",
+        "question": "Sinh viên được miễn giảm học phí trong trường hợp nào?",
+        "answer": "Các đối tượng được miễn giảm học phí theo quy định:\n\n🔹 Miễn 100%:\n• Con liệt sĩ, con thương binh nặng\n• Sinh viên mồ côi cả cha lẫn mẹ\n• Sinh viên khuyết tật nặng\n\n🔹 Giảm 70%:\n• Sinh viên dân tộc thiểu số thuộc hộ nghèo\n\n🔹 Giảm 50%:\n• Sinh viên thuộc hộ nghèo theo chuẩn quốc gia\n\nHồ sơ nộp tại Phòng Công tác Sinh viên trước ngày 15 của tháng đầu mỗi học kỳ.",
+        "likes": 28,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_004",
+        "category": "dang_ky",
+        "question": "Cách đăng ký học phần trên hệ thống?",
+        "answer": "Quy trình đăng ký học phần online:\n\n1. Truy cập hệ thống: https://qldt.tlu.edu.vn\n2. Đăng nhập bằng tài khoản sinh viên\n3. Vào mục \"Đăng ký học phần\"\n4. Chọn các môn học theo kế hoạch đào tạo\n5. Chọn lớp và ca học phù hợp\n6. Nhấn \"Xác nhận đăng ký\"\n\n⚠️ Lưu ý quan trọng:\n• Kiểm tra điều kiện tiên quyết trước khi đăng ký\n• Số tín chỉ tối thiểu: 14 TC/kỳ, tối đa: 25 TC/kỳ\n• Nên đăng ký sớm để có nhiều lựa chọn lớp học",
+        "likes": 55,
+        "dislikes": 2
+    },
+    {
+        "faq_id": "faq_005",
+        "category": "dang_ky",
+        "question": "Làm sao để hủy đăng ký học phần đã đăng ký?",
+        "answer": "Hướng dẫn hủy học phần:\n\n1. Đăng nhập hệ thống QLDT\n2. Vào \"Đăng ký học phần\" → \"Kết quả đăng ký\"\n3. Tìm môn cần hủy và nhấn \"Hủy đăng ký\"\n4. Xác nhận hủy\n\n⏰ Thời hạn hủy: Trong 2 tuần đầu của học kỳ (không mất phí)\nSau 2 tuần: Được rút học phần nhưng vẫn phải đóng 50% học phí môn đó.\n\nSinh viên cần cân nhắc kỹ trước khi hủy để đảm bảo đủ số tín chỉ tối thiểu trong kỳ.",
+        "likes": 20,
+        "dislikes": 1
+    },
+    {
+        "faq_id": "faq_006",
+        "category": "tot_nghiep",
+        "question": "Điều kiện để được xét tốt nghiệp là gì?",
+        "answer": "Điều kiện xét tốt nghiệp tại Đại học Thủy Lợi:\n\n✅ Tích lũy đủ số tín chỉ theo chương trình đào tạo\n✅ Điểm trung bình tích lũy (CPA) ≥ 2.0/4.0\n✅ Không đang trong thời gian bị truy cứu trách nhiệm hình sự\n✅ Hoàn thành nghĩa vụ học phí\n✅ Đạt chuẩn đầu ra Tiếng Anh (TOEIC ≥ 450 hoặc tương đương)\n✅ Đạt chuẩn đầu ra Tin học (chứng chỉ IC3/MOS hoặc tương đương)\n✅ Hoàn thành Giáo dục Quốc phòng – An ninh\n✅ Đã bảo vệ Đồ án / Khóa luận tốt nghiệp đạt yêu cầu",
+        "likes": 67,
+        "dislikes": 4
+    },
+    {
+        "faq_id": "faq_007",
+        "category": "tot_nghiep",
+        "question": "Quy trình nộp hồ sơ xét tốt nghiệp?",
+        "answer": "Quy trình nộp hồ sơ xét tốt nghiệp:\n\nBước 1: Kiểm tra điều kiện tốt nghiệp trên hệ thống QLDT\nBước 2: Chuẩn bị hồ sơ gồm:\n   • Đơn xin xét tốt nghiệp (theo mẫu)\n   • Bản sao chứng chỉ Tiếng Anh\n   • Bản sao chứng chỉ Tin học\n   • Chứng nhận hoàn thành GDQP-AN\n   • 4 ảnh 3x4 (nền xanh)\nBước 3: Nộp hồ sơ tại Phòng Đào tạo\nBước 4: Theo dõi kết quả trên website trường\n\nThời gian xét: 30 ngày làm việc kể từ ngày kết thúc nhận hồ sơ.",
+        "likes": 38,
+        "dislikes": 2
+    },
+    {
+        "faq_id": "faq_008",
+        "category": "hoc_bong",
+        "question": "Các loại học bổng hiện có tại TLU?",
+        "answer": "Đại học Thủy Lợi hiện có các loại học bổng:\n\n🏆 Học bổng Khuyến khích Học tập:\n• Loại Xuất sắc: 100% học phí\n• Loại Giỏi: 50% học phí\n• Loại Khá: 30% học phí\n\n🌟 Học bổng Tài năng TLU:\n• Dành cho sinh viên có thành tích nghiên cứu khoa học, thi đấu thể thao quốc gia\n\n🤝 Học bổng Doanh nghiệp:\n• Học bổng Samsung, Vietcombank, EVN (theo từng đợt)\n\n💚 Học bổng Hỗ trợ:\n• Dành cho sinh viên có hoàn cảnh khó khăn vượt khó\n\nThông tin chi tiết xem tại: Phòng Công tác Sinh viên",
+        "likes": 51,
+        "dislikes": 1
+    },
+    {
+        "faq_id": "faq_009",
+        "category": "hoc_bong",
+        "question": "Điều kiện để được xét học bổng khuyến khích học tập?",
+        "answer": "Điều kiện xét Học bổng Khuyến khích Học tập:\n\n📌 Điều kiện chung:\n• Không vi phạm kỷ luật trong học kỳ xét\n• Không có môn điểm F hoặc bị cấm thi\n• Đăng ký tối thiểu 14 tín chỉ trong kỳ\n\n📌 Xếp loại cụ thể:\n• Xuất sắc: GPA ≥ 3.6 và Rèn luyện Xuất sắc\n• Giỏi: GPA ≥ 3.2 và Rèn luyện Tốt trở lên\n• Khá: GPA ≥ 2.8 và Rèn luyện Khá trở lên\n\nHọc bổng được xét tự động sau mỗi học kỳ, sinh viên không cần nộp đơn.",
+        "likes": 42,
+        "dislikes": 0
+    },
+    {
+        "faq_id": "faq_010",
+        "category": "ktx",
+        "question": "Cách đăng ký ở ký túc xá?",
+        "answer": "Hướng dẫn đăng ký ở Ký túc xá TLU:\n\n1. Truy cập website KTX: https://ktx.tlu.edu.vn\n2. Điền đơn đăng ký online\n3. Chọn loại phòng:\n   • Phòng 6 người: 200.000đ/tháng\n   • Phòng 4 người: 350.000đ/tháng\n   • Phòng 2 người (có điều hòa): 600.000đ/tháng\n4. Nộp hồ sơ gốc tại Ban Quản lý KTX\n5. Đóng phí và nhận phòng\n\n📋 Hồ sơ cần thiết:\n• Đơn đăng ký (theo mẫu)\n• Bản sao CMND/CCCD\n• Giấy xác nhận sinh viên\n• 2 ảnh 3x4\n\nƯu tiên: Sinh viên năm nhất, sinh viên ngoại tỉnh, sinh viên có hoàn cảnh khó khăn.",
+        "likes": 33,
+        "dislikes": 2
+    },
+    {
+        "faq_id": "faq_011",
+        "category": "ktx",
+        "question": "Nội quy và quy định ở KTX?",
+        "answer": "Nội quy Ký túc xá Đại học Thủy Lợi:\n\n🕐 Giờ giấc:\n• Đóng cổng: 23:00 hàng ngày\n• Mở cổng: 05:00 sáng\n• Giờ yên tĩnh: 22:00 — 06:00\n\n🚫 Nghiêm cấm:\n• Sử dụng chất kích thích, rượu bia trong KTX\n• Nấu ăn trong phòng ở\n• Chứa chấp người lạ qua đêm\n• Sử dụng thiết bị điện công suất lớn\n\n✅ Quy định:\n• Giữ vệ sinh phòng ở và khu vực chung\n• Đóng tiền phòng đúng hạn (trước ngày 10 hàng tháng)\n• Báo cáo Ban Quản lý khi có sự cố\n• Tham gia các buổi kiểm tra phòng ở định kỳ",
+        "likes": 18,
+        "dislikes": 3
+    }
+]

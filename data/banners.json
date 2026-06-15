@@ -1,0 +1,34 @@
+[
+    {
+        "id": "banner_001",
+        "icon": "🚨",
+        "title": "Hạn đóng học phí HK2 năm học 2025-2026",
+        "subtitle": "Hạn cuối: 30/06/2026 — Vui lòng hoàn thành trước thời hạn",
+        "gradient": "linear-gradient(135deg, #ff416c, #ff4b2b)",
+        "urgent": true
+    },
+    {
+        "id": "banner_002",
+        "icon": "📅",
+        "title": "Đăng ký học phần HK1 năm 2026-2027",
+        "subtitle": "Thời gian đăng ký: 01/07 — 15/07/2026",
+        "gradient": "linear-gradient(135deg, #667eea, #764ba2)",
+        "urgent": false
+    },
+    {
+        "id": "banner_003",
+        "icon": "🎓",
+        "title": "Thông báo xét tốt nghiệp đợt tháng 9/2026",
+        "subtitle": "Nộp hồ sơ từ 01/08 — 15/08/2026 tại Phòng Đào tạo",
+        "gradient": "linear-gradient(135deg, #11998e, #38ef7d)",
+        "urgent": false
+    },
+    {
+        "id": "banner_004",
+        "icon": "🏅",
+        "title": "Chương trình Học bổng Tài năng TLU 2026",
+        "subtitle": "Đang mở đơn đăng ký — Hạn nộp: 20/07/2026",
+        "gradient": "linear-gradient(135deg, #f093fb, #f5576c)",
+        "urgent": false
+    }
+]

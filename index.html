@@ -33,7 +33,7 @@
             </div>
         </header>
 
-        <main id="main-content">
+        <main id="main-app-content">
             <h2>Chào mừng bạn đến với Cổng hỗ trợ học vụ</h2>
             <p>Nội dung</p>
         </main>
@@ -44,6 +44,45 @@
             <button class="nav-item" data-target="history">Lịch sử</button>
         </nav>
     </div>
+
+    <!-- ============================================ -->
+    <!-- TV2: FAQ DETAIL MODAL POPUP                  -->
+    <!-- ============================================ -->
+    <div class="modal-overlay" id="faq-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-header">
+                <span class="modal-category-badge" id="modal-category"></span>
+            </div>
+            <h3 class="modal-question" id="modal-question"></h3>
+            <div class="modal-answer" id="modal-answer"></div>
+
+            <!-- TV3: Audio Player (TV3 sẽ implement logic playAudio) -->
+            <div class="modal-audio" id="modal-audio-container">
+                <button class="btn-audio" id="btn-play-audio" title="Nghe AI đọc">
+                    🔊 Nghe AI đọc
+                </button>
+            </div>
+
+            <!-- Modal Actions: Bookmark + Rating -->
+            <div class="modal-actions">
+                <button class="btn-action" id="btn-bookmark" title="Lưu câu hỏi">
+                    🔖 Lưu
+                </button>
+                <div class="rating-group">
+                    <button class="btn-rate btn-like" id="btn-like">
+                        👍 <span id="like-count">0</span>
+                    </button>
+                    <button class="btn-rate btn-dislike" id="btn-dislike">
+                        👎 <span id="dislike-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TV2: Toast Notification Container -->
+    <div class="toast-container" id="toast-container"></div>
 
     <script type="module" src="app.js"></script>
 </body>

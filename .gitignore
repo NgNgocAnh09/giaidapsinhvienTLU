@@ -1,0 +1,21 @@
+# Firebase Service Account Key (BẢO MẬT - KHÔNG PUSH LÊN GITHUB!)
+scripts/serviceAccountKey.json
+
+# Node modules
+node_modules/
+
+# Firebase cache & logs
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+
+# Seed script (chỉ dùng 1 lần, có API key)
+seed.html
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
