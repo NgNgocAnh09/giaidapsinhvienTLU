@@ -7,8 +7,7 @@
 // ========== 1. IMPORT FIREBASE SDK ==========
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { getFirestore, collection, getDocs, doc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
+import { getFirestore, collection, getDocs, doc, updateDoc, increment, getDoc, setDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 // ========== 2. FIREBASE CONFIG ==========
 const firebaseConfig = {
     apiKey: "AIzaSyAPMC0P8vXHt4a1E1f6wx0URYB2wexHqcY",
@@ -189,6 +188,8 @@ async function loadBannersFromFirestore() {
 // ================================================================
 // TV2: KHỞI TẠO TAB TRANG CHỦ
 // ================================================================
+let currentUserSavedFAQs = [];
+
 async function initHomeTab() {
     if (homeInitialized) {
         renderHomeTab();
@@ -203,10 +204,24 @@ async function initHomeTab() {
         </div>
     `;
 
-    // Load dữ liệu song song
+    // Hàm phụ: Tải Bookmark của user từ Firestore
+    const email = window.getCurrentUserEmail();
+    const loadBookmarks = async () => {
+        if (!email) return;
+        const userRef = doc(db, "user_bookmarks", email);
+        const docSnap = await getDoc(userRef);
+        if (docSnap.exists()) {
+            currentUserSavedFAQs = docSnap.data().saved_faqs || [];
+        } else {
+            await setDoc(userRef, { saved_faqs: [] });
+        }
+    };
+
+    // Load dữ liệu song song cả 3 thứ: Banners, FAQs, và Bookmarks
     const [banners, faqs] = await Promise.all([
         loadBannersFromFirestore(),
-        loadFAQsFromFirestore()
+        loadFAQsFromFirestore(),
+        loadBookmarks()
     ]);
 
     allBanners = banners;
@@ -633,27 +648,44 @@ function initModalListeners() {
     // TV2 chỉ vẽ UI và toggle cơ bản bằng localStorage
     const btnBookmark = document.getElementById('btn-bookmark');
     if (btnBookmark) {
-        btnBookmark.addEventListener('click', () => {
+        btnBookmark.addEventListener('click', async () => {
             if (!currentModalFaq) return;
-
-            const faqId = currentModalFaq.faq_id;
-            let savedFAQs = JSON.parse(localStorage.getItem('tlu_saved_faqs') || '[]');
-
-            if (savedFAQs.includes(faqId)) {
-                // Bỏ lưu
-                savedFAQs = savedFAQs.filter(id => id !== faqId);
-                btnBookmark.classList.remove('saved');
-                btnBookmark.innerHTML = '🔖 Lưu';
-                showToast('Đã bỏ lưu câu hỏi ✖️');
-            } else {
-                // Lưu
-                savedFAQs.push(faqId);
-                btnBookmark.classList.add('saved');
-                btnBookmark.innerHTML = '⭐ Đã lưu';
-                showToast('Đã lưu câu hỏi! ⭐');
+            const email = window.getCurrentUserEmail();
+            if (!email) {
+                showToast('Vui lòng đăng nhập để lưu câu hỏi!');
+                return;
             }
 
-            localStorage.setItem('tlu_saved_faqs', JSON.stringify(savedFAQs));
+            const faqId = currentModalFaq.faq_id;
+            const userRef = doc(db, "user_bookmarks", email);
+            
+            // Khóa nút tạm thời để tránh click spam gây lỗi database
+            btnBookmark.style.pointerEvents = 'none';
+
+            try {
+                if (currentUserSavedFAQs.includes(faqId)) {
+                    // Bỏ lưu: Xóa khỏi mảng trên Firestore
+                    await updateDoc(userRef, { saved_faqs: arrayRemove(faqId) });
+                    currentUserSavedFAQs = currentUserSavedFAQs.filter(id => id !== faqId); // Cập nhật RAM
+                    
+                    btnBookmark.classList.remove('saved');
+                    btnBookmark.innerHTML = '🔖 Lưu';
+                    showToast('Đã bỏ lưu câu hỏi ✖️');
+                } else {
+                    // Lưu: Thêm vào mảng trên Firestore
+                    await updateDoc(userRef, { saved_faqs: arrayUnion(faqId) });
+                    currentUserSavedFAQs.push(faqId); // Cập nhật RAM
+                    
+                    btnBookmark.classList.add('saved');
+                    btnBookmark.innerHTML = '⭐ Đã lưu';
+                    showToast('Đã đồng bộ lưu lên Cloud! ⭐');
+                }
+            } catch (error) {
+                console.error("Lỗi đồng bộ Bookmark:", error);
+                showToast('Lỗi mạng khi lưu câu hỏi ❌');
+            } finally {
+                btnBookmark.style.pointerEvents = 'auto'; // Mở lại nút
+            }
         });
     }
 
@@ -731,7 +763,7 @@ navItems.forEach(item => {
 function renderSavedTab() {
     stopBannerAutoPlay();
 
-    const savedFAQIds = JSON.parse(localStorage.getItem('tlu_saved_faqs') || '[]');
+    const savedFAQIds = currentUserSavedFAQs;
 
     if (savedFAQIds.length === 0) {
         mainContent.innerHTML = `
@@ -796,11 +828,18 @@ function renderSavedTab() {
     // Xử lý nút xóa tất cả
     const clearBtn = document.getElementById('clear-saved-btn');
     if (clearBtn) {
-        clearBtn.addEventListener('click', () => {
-            if (confirm('Bạn có chắc muốn xóa tất cả câu hỏi đã lưu?')) {
-                localStorage.removeItem('tlu_saved_faqs');
-                showToast('Đã xóa tất cả câu hỏi đã lưu ✖️');
-                renderSavedTab();
+        clearBtn.addEventListener('click', async () => {
+            const email = window.getCurrentUserEmail();
+            if (confirm('Bạn có chắc muốn xóa tất cả câu hỏi đã lưu trên hệ thống?')) {
+                try {
+                    // Xóa mảng trên Firestore
+                    await updateDoc(doc(db, "user_bookmarks", email), { saved_faqs: [] });
+                    currentUserSavedFAQs = []; // Xóa trên RAM
+                    showToast('Đã xóa tất cả dữ liệu lưu trữ ✖️');
+                    renderSavedTab(); // Vẽ lại giao diện trống
+                } catch (error) {
+                    showToast('Có lỗi xảy ra khi xóa ❌');
+                }
             }
         });
     }
