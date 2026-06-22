@@ -60,11 +60,12 @@ async function uploadCollection(collectionName, dataArray, idField) {
     let count = 0;
 
     for (const item of dataArray) {
-        const docId = item[idField];
-        if (!docId) {
+        const rawId = item[idField];
+        if (rawId === undefined || rawId === null) {
             console.warn(`⚠️ Bỏ qua item không có ${idField}:`, item);
             continue;
         }
+        const docId = String(rawId);
 
         const docRef = db.collection(collectionName).doc(docId);
         batch.set(docRef, item, { merge: true }); // merge: true để không ghi đè nếu đã có
