@@ -44,6 +44,8 @@ let currentModalFaq = null;
 let bannerInterval = null;
 let currentBannerIndex = 0;
 let homeInitialized = false;
+let homeLoading = false;
+window.allUserTickets = [];
 
 // ================================================================
 // 3. CÁC BIẾN DOM (TV1)
@@ -195,6 +197,9 @@ async function initHomeTab() {
         renderHomeTab();
         return;
     }
+    if (homeLoading) return;
+
+    homeLoading = true;
 
     // Hiển thị loading
     mainContent.innerHTML = `
@@ -204,31 +209,27 @@ async function initHomeTab() {
         </div>
     `;
 
-    // Hàm phụ: Tải Bookmark của user từ Firestore
-    const email = window.getCurrentUserEmail();
-    const loadBookmarks = async () => {
-        if (!email) return;
-        const userRef = doc(db, "user_bookmarks", email);
-        const docSnap = await getDoc(userRef);
-        if (docSnap.exists()) {
-            currentUserSavedFAQs = docSnap.data().saved_faqs || [];
-        } else {
-            await setDoc(userRef, { saved_faqs: [] });
-        }
-    };
+    try {
+        // Load dữ liệu song song
+        const [banners, faqs] = await Promise.all([
+            loadBannersFromFirestore(),
+            loadFAQsFromFirestore()
+        ]);
 
-    // Load dữ liệu song song cả 3 thứ: Banners, FAQs, và Bookmarks
-    const [banners, faqs] = await Promise.all([
-        loadBannersFromFirestore(),
-        loadFAQsFromFirestore(),
-        loadBookmarks()
-    ]);
+        allBanners = banners;
+        allFAQs = faqs;
+        homeInitialized = true;
+    } catch (error) {
+        console.error("Lỗi khi tải dữ liệu trang chủ:", error);
+    } finally {
+        homeLoading = false;
+    }
 
-    allBanners = banners;
-    allFAQs = faqs;
-    homeInitialized = true;
-
-    renderHomeTab();
+    // Kiểm tra xem người dùng có còn ở tab Home không trước khi render
+    const activeNavItem = document.querySelector('.nav-item.active');
+    if (activeNavItem && activeNavItem.getAttribute('data-target') === 'home') {
+        renderHomeTab();
+    }
 }
 
 // ================================================================
@@ -720,7 +721,7 @@ navItems.forEach(item => {
 
         if (target === 'home') {
             // TV2: Render trang chủ
-            renderHomeTab();
+            initHomeTab();
         } else if (target === 'saved') {
             stopBannerAutoPlay();
             // TV3 sẽ implement renderSavedTab()
@@ -973,54 +974,214 @@ window.stopAudio = function() {
 };
 
 // ================================================================
-// TV5: TAB LỊCH SỬ & BIỂU ĐỒ THỐNG KÊ 
+// ================================================================
+// LOGIC ĐỒNG BỘ ZOHO DESK (GỬI YÊU CẦU & XEM LỊCH SỬ THỰC TẾ)
 // ================================================================
 
-// Biến lưu trữ biểu đồ để tránh lỗi vẽ đè khi load lại tab
+// Đường link Endpoint sau khi bạn deploy thành công Python Cloud Function ở Bước 1
+const ZOHO_GATEWAY_URL = "http://127.0.0.1:5000/zoho-gateway";
+
 let historyChartInstance = null;
 
-// Mock data: Tạm thời dùng mảng này để test UI khi chưa có API Python của Zoho Desk
-let mockTickets = [
-    { id: "TCK_001", subject: "Lỗi đăng ký tín chỉ học kỳ 1", department: "DEPT_01", status: "Open", date: "16/06/2026" },
-    { id: "TCK_002", subject: "Thắc mắc về thủ tục làm lại thẻ sinh viên", department: "DEPT_02", status: "Closed", date: "10/06/2026" },
-    { id: "TCK_003", subject: "Xác nhận đóng học phí qua chuyển khoản", department: "DEPT_03", status: "In Progress", date: "14/06/2026" }
-];
-
-// Hàm giả lập gọi API Zoho Desk (Cloud Function)
-async function fetchUserTickets(email) {
-    // Thực tế: return await fetch(`https://api-python-cloud-function/get_tickets?email=${email}`).then(res => res.json());
-    return new Promise(resolve => setTimeout(() => resolve(mockTickets), 500)); 
-}
-
-// Hàm chính hiển thị Tab Lịch sử
-window.renderHistoryTab = async function() {
-    // Biến lưu trữ dữ liệu gốc và trạng thái bộ lọc
-window.allUserTickets = []; 
+// Khai báo các trạng thái bộ lọc Lịch sử ra bên ngoài để tránh mất dữ liệu khi render lại
 let currentTicketSearch = '';
 let currentTicketStatus = 'all';
 let currentTicketDept = 'all';
 
-// Hàm filter và render lại danh sách Ticket
-window.filterAndRenderTickets = function() {
-    let filtered = window.allUserTickets;
+// Hàm mở Modal form gửi Yêu cầu hỗ trợ mới
+window.openTicketModal = function() {
+    const modal = document.getElementById('ticket-modal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+};
 
-    // 1. Lọc theo tiêu đề (Search)
-    if (currentTicketSearch.trim()) {
-        const query = currentTicketSearch.toLowerCase().trim();
-        filtered = filtered.filter(t => t.subject.toLowerCase().includes(query));
+// Hàm đóng Modal form gửi Yêu cầu
+window.closeTicketModal = function() {
+    const modal = document.getElementById('ticket-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+};
+
+// Đăng ký các sự kiện đóng cửa sổ Modal tạo Ticket khi click ra ngoài hoặc bấm nút hủy
+document.getElementById('ticket-modal-close').addEventListener('click', window.closeTicketModal);
+document.getElementById('ticket-modal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('ticket-modal')) window.closeTicketModal();
+});
+
+// Các hàm trợ giúp để tích hợp đoạn mã handleSendRequest
+function showLoadingSpinner(show) {
+    const btnSubmit = document.getElementById('btn-submit-ticket');
+    if (btnSubmit) {
+        if (show) {
+            btnSubmit.innerText = 'Đang gửi dữ liệu qua Zoho...';
+            btnSubmit.disabled = true;
+        } else {
+            btnSubmit.innerText = 'Gửi Ban Giám Hiệu';
+            btnSubmit.disabled = false;
+        }
+    }
+}
+
+function renderTicketsToUI(tickets) {
+    window.allUserTickets = tickets;
+    window.filterAndRenderTickets();
+}
+
+function updateBiethuDoTron(tickets) {
+    renderPieChart(tickets);
+}
+
+function closeModalForm() {
+    window.closeTicketModal();
+}
+
+function showToastMessage(message) {
+    if (typeof window._showToast === 'function') {
+        window._showToast(message);
+    } else {
+        showToast(message);
+    }
+}
+
+async function handleSendRequest(event) {
+    event.preventDefault();
+    
+    // Lấy dữ liệu sinh viên gõ từ Form (Dùng thêm cơ chế fallback qua getCurrentUserEmail nếu không tìm thấy thẻ student-email)
+    const emailEl = document.getElementById("student-email");
+    const emailInput = emailEl ? emailEl.value : window.getCurrentUserEmail();
+    const subjectInput = document.getElementById("ticket-subject").value;
+    const descInput = document.getElementById("ticket-desc").value;
+    const deptInput = document.getElementById("ticket-dept").value; // DEPT_01, DEPT_02...
+
+    if (!emailInput) {
+        showToastMessage("🔒 Vui lòng đăng nhập hệ thống trước!");
+        return;
     }
 
-    // 2. Lọc theo trạng thái (Status)
+    const formData = {
+        email: emailInput,
+        subject: subjectInput,
+        description: descInput,
+        department: deptInput
+    };
+
+    // Tạo ID tạm thời để nhận diện
+    const tempId = "temp_" + Date.now();
+    
+    // Tạo Ticket tạm thời để đẩy lên giao diện lập tức (Optimistic UI)
+    const localNewTicket = {
+        id: tempId,
+        subject: subjectInput,
+        department: deptInput,           // Giữ nguyên mã DEPT_01/02/03 sinh viên vừa chọn
+        status: "Open",                  // Trạng thái mặc định ban đầu là Open
+        date: new Date().toLocaleDateString('vi-VN') // Lấy ngày hôm nay (DD/MM/YYYY)
+    };
+
+    // Nhét tấm card mới này LÊN ĐẦU mảng danh sách lịch sử hiện tại trên Web ngay lập tức
+    if (!Array.isArray(window.allUserTickets)) {
+        window.allUserTickets = [];
+    }
+    window.allUserTickets.unshift(localNewTicket);
+
+    // Ép giao diện vẽ lại danh sách và vẽ lại biểu đồ Chart.js ngay lập tức không cần đợi API phản hồi
+    renderTicketsToUI(window.allUserTickets);
+    updateBiethuDoTron(window.allUserTickets);
+
+    // Đóng modal form, reset ô nhập liệu và thông báo cho người dùng
+    closeModalForm();
+    document.getElementById('create-ticket-form').reset();
+    showToastMessage("⏳ Đang gửi yêu cầu lên Zoho Desk...");
+
+    // Gọi API ngầm trong nền (background) để không làm đơ nút hay khóa màn hình
+    fetch(ZOHO_GATEWAY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData)
+    })
+    .then(async (response) => {
+        if (response.ok) {
+            // Lấy trực tiếp dữ liệu Ticket thật mà Zoho vừa trả về
+            const rawTicketData = await response.json(); 
+
+            // Cấu trúc lại Ticket chính thức
+            const realTicket = {
+                id: rawTicketData.id,
+                subject: rawTicketData.subject,
+                department: deptInput,
+                status: rawTicketData.status || "Open",
+                date: localNewTicket.date
+            };
+
+            // Thay thế ticket tạm thời bằng ticket thật trong mảng toàn cục
+            const idx = window.allUserTickets.findIndex(t => t.id === tempId);
+            if (idx !== -1) {
+                window.allUserTickets[idx] = realTicket;
+            } else {
+                window.allUserTickets.unshift(realTicket);
+            }
+
+            // Render lại UI để cập nhật thông tin chính xác từ Zoho (như ID thật)
+            renderTicketsToUI(window.allUserTickets);
+            updateBiethuDoTron(window.allUserTickets);
+            showToastMessage("✅ Đã gửi yêu cầu lên Zoho Desk thành công!");
+        } else {
+            throw new Error("Lỗi phản hồi từ server Zoho");
+        }
+    })
+    .catch((error) => {
+        console.error("Lỗi khi gửi ticket ngầm:", error);
+        
+        // Nếu thất bại, xóa bỏ ticket tạm thời khỏi danh sách để tránh thông tin rác
+        window.allUserTickets = window.allUserTickets.filter(t => t.id !== tempId);
+        
+        // Cập nhật lại giao diện và thông báo lỗi
+        renderTicketsToUI(window.allUserTickets);
+        updateBiethuDoTron(window.allUserTickets);
+        showToastMessage("❌ Gửi yêu cầu thất bại. Vui lòng kiểm tra lại mạng!");
+    });
+}
+
+// Chức năng: Đăng ký hàm handleSendRequest lắng nghe sự kiện gửi form
+document.getElementById('create-ticket-form').addEventListener('submit', handleSendRequest);
+
+// Chức năng: Gọi API thật để kéo toàn bộ danh sách Ticket của sinh viên về máy
+async function fetchUserTickets(email) {
+    if (!email) return [];
+    try {
+        const response = await fetch(`${ZOHO_GATEWAY_URL}?email=${encodeURIComponent(email)}`);
+        if (!response.ok) throw new Error('Mất kết nối máy chủ Zoho');
+        const tickets = await response.json();
+        return Array.isArray(tickets) ? tickets : [];
+    } catch (error) {
+        console.error("Lỗi tải lịch sử Ticket:", error);
+        return [];
+    }
+}
+
+// Chức năng: Thực hiện lọc dữ liệu cục bộ theo ô Tìm kiếm / Dropdown và kết xuất ra giao diện Card
+window.filterAndRenderTickets = function() {
+    let filtered = window.allUserTickets || [];
+
+    // 1. Lọc theo chuỗi từ khóa tiêu đề (Search)
+    if (currentTicketSearch.trim()) {
+        const query = currentTicketSearch.toLowerCase().trim();
+        filtered = filtered.filter(t => t.subject && t.subject.toLowerCase().includes(query));
+    }
+
+    // 2. Lọc theo mã trạng thái (Status)
     if (currentTicketStatus !== 'all') {
         filtered = filtered.filter(t => t.status === currentTicketStatus);
     }
 
-    // 3. Lọc theo phòng ban (Department)
+    // 3. Lọc theo mã phòng ban (Department)
     if (currentTicketDept !== 'all') {
         filtered = filtered.filter(t => t.department === currentTicketDept);
     }
 
-    // Cập nhật lại giao diện danh sách
     const listEl = document.getElementById('ticket-list');
     if (!listEl) return;
 
@@ -1028,20 +1189,20 @@ window.filterAndRenderTickets = function() {
         listEl.innerHTML = `
             <div class="faq-empty">
                 <div class="faq-empty-icon">🔍</div>
-                <div class="faq-empty-text">Không tìm thấy yêu cầu nào phù hợp với bộ lọc.</div>
+                <div class="faq-empty-text">Không tìm thấy yêu cầu nào phù hợp với bộ lọc hiện tại.</div>
             </div>`;
     } else {
         listEl.innerHTML = filtered.map(renderTicketCard).join('');
     }
 };
 
-// Hàm chính hiển thị Tab Lịch sử (Đã cập nhật thêm Toolbar)
+// Hàm chính: Kết xuất giao diện tổng thể Tab Lịch sử (Bao gồm biểu đồ tròn và Thanh công cụ Lọc)
 window.renderHistoryTab = async function() {
     if (typeof stopBannerAutoPlay === 'function') stopBannerAutoPlay();
 
     const mainContent = document.getElementById('main-app-content');
-    
     const userEmail = window.getCurrentUserEmail();
+    
     if (!userEmail) {
         mainContent.innerHTML = `<div class="faq-empty"><div class="faq-empty-icon">🔒</div><div class="faq-empty-text">Vui lòng đăng nhập để xem lịch sử.</div></div>`;
         return;
@@ -1050,40 +1211,56 @@ window.renderHistoryTab = async function() {
     mainContent.innerHTML = `
         <div class="faq-loading">
             <div class="loading-spinner"></div>
-            <p>Đang tải dữ liệu...</p>
+            <p>Đang đồng bộ dữ liệu với Zoho Desk...</p>
         </div>
     `;
 
-    // Lấy dữ liệu và lưu vào biến toàn cục để dùng cho bộ lọc
-    window.allUserTickets = await fetchUserTickets(userEmail);
+    // Gọi API thật để nạp dữ liệu từ Zoho vào biến mảng toàn cục
+    const freshTickets = await fetchUserTickets(userEmail);
+    
+    // Kiểm tra xem người dùng có còn ở tab Lịch sử không trước khi render tiếp
+    const activeNavItem = document.querySelector('.nav-item.active');
+    if (!activeNavItem || activeNavItem.getAttribute('data-target') !== 'history') {
+        return;
+    }
+    
+    // Mẹo: Nếu Zoho trả về có dữ liệu, hoặc đây là lần đầu nạp trang thì mới gán.
+    // Nếu Zoho trả về rỗng (204 do trễ index) nhưng trên web đã có sẵn ticket vừa tạo, KHÔNG ghi đè rỗng lên nó.
+    if (freshTickets.length > 0 || !window.allUserTickets || window.allUserTickets.length === 0) {
+        window.allUserTickets = freshTickets;
+    }
 
-    // Dựng giao diện tổng thể có Thanh công cụ Lọc
     mainContent.innerHTML = `
         <div style="padding: 16px;">
-            <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 16px;">
-                📋 Lịch sử Yêu cầu hỗ trợ
-            </h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin: 0;">
+                    📋 Lịch sử Yêu cầu hỗ trợ
+                </h2>
+                <button onclick="window.openTicketModal()" style="padding: 8px 14px; background: var(--success-color, #10b981); color: white; border: none; border-radius: var(--radius-sm); font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: var(--transition);">
+                    ➕ Tạo Yêu Cầu Mới
+                </button>
+            </div>
 
             <div style="background: var(--card-bg); padding: 16px; border-radius: var(--radius-md); box-shadow: var(--shadow-sm); margin-bottom: 16px;">
                 <canvas id="ticketStatusChart" style="max-height: 220px;"></canvas>
             </div>
 
             <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
-                <input type="text" id="ticket-search" placeholder="🔍 Tìm kiếm tiêu đề..." 
+                <input type="text" id="ticket-search" placeholder="🔍 Tìm kiếm tiêu đề..." value="${currentTicketSearch}"
                     style="flex: 1; min-width: 140px; padding: 10px; border-radius: var(--radius-sm); border: 2px solid var(--border-color); outline: none;">
                 
                 <select id="ticket-status-filter" style="padding: 10px; border-radius: var(--radius-sm); border: 2px solid var(--border-color); outline: none; background: var(--card-bg);">
-                    <option value="all">Tất cả trạng thái</option>
-                    <option value="Open">🟡 Đang chờ xử lý</option>
-                    <option value="In Progress">🔵 Đang xử lý</option>
-                    <option value="Closed">🟢 Đã giải quyết</option>
+                    <option value="all" ${currentTicketStatus === 'all' ? 'selected' : ''}>Tất cả trạng thái</option>
+                    <option value="Open" ${currentTicketStatus === 'Open' ? 'selected' : ''}>🟡 Đang chờ xử lý</option>
+                    <option value="In Progress" ${currentTicketStatus === 'In Progress' ? 'selected' : ''}>🔵 Đang xử lý</option>
+                    <option value="Closed" ${currentTicketStatus === 'Closed' ? 'selected' : ''}>🟢 Đã giải quyết</option>
                 </select>
 
                 <select id="ticket-dept-filter" style="padding: 10px; border-radius: var(--radius-sm); border: 2px solid var(--border-color); outline: none; background: var(--card-bg);">
-                    <option value="all">Tất cả phòng ban</option>
-                    <option value="DEPT_01">Phòng Đào tạo</option>
-                    <option value="DEPT_02">Phòng CT Sinh viên</option>
-                    <option value="DEPT_03">Phòng TC Kế toán</option>
+                    <option value="all" ${currentTicketDept === 'all' ? 'selected' : ''}>Tất cả phòng ban</option>
+                    <option value="DEPT_01" ${currentTicketDept === 'DEPT_01' ? 'selected' : ''}>Phòng Đào tạo</option>
+                    <option value="DEPT_02" ${currentTicketDept === 'DEPT_02' ? 'selected' : ''}>Phòng Công tác Sinh viên</option>
+                    <option value="DEPT_03" ${currentTicketDept === 'DEPT_03' ? 'selected' : ''}>Phòng Tài chính Kế toán</option>
                 </select>
             </div>
 
@@ -1091,39 +1268,33 @@ window.renderHistoryTab = async function() {
         </div>
     `;
 
-    // Vẽ biểu đồ với toàn bộ dữ liệu ban đầu
+    // Vẽ biểu đồ tròn dựa trên số liệu thật thu được
     renderPieChart(window.allUserTickets);
-
-    // Hiển thị danh sách lần đầu tiên
+    // Xuất bản danh sách Card ra UI
     window.filterAndRenderTickets();
 
-    // ============================================
-    // Gắn Event Listeners cho các công cụ lọc
-    // ============================================
+    // Thiết lập các cổng lắng nghe sự kiện thay đổi trên thanh công cụ lọc
     document.getElementById('ticket-search').addEventListener('input', (e) => {
         currentTicketSearch = e.target.value;
         window.filterAndRenderTickets();
     });
-
     document.getElementById('ticket-status-filter').addEventListener('change', (e) => {
         currentTicketStatus = e.target.value;
         window.filterAndRenderTickets();
     });
-
     document.getElementById('ticket-dept-filter').addEventListener('change', (e) => {
         currentTicketDept = e.target.value;
         window.filterAndRenderTickets();
     });
 };
-};
 
-// Hàm render từng thẻ Ticket
+// Hàm định dạng thẻ Card cho từng Ticket dựa trên quy chuẩn mã màu của dự án
 function renderTicketCard(ticket) {
-    // Xử lý Từ điển dữ liệu màu sắc & Trạng thái
     let statusColor, statusText;
-    if (ticket.status === 'Open') { statusColor = 'var(--warning-color)'; statusText = 'Đang chờ xử lý'; }
-    else if (ticket.status === 'In Progress') { statusColor = 'var(--primary-color)'; statusText = 'Đang xử lý'; }
-    else if (ticket.status === 'Closed') { statusColor = 'var(--success-color)'; statusText = 'Đã giải quyết'; }
+    if (ticket.status === 'Open') { statusColor = '#f59e0b'; statusText = 'Đang chờ xử lý'; }
+    else if (ticket.status === 'In Progress') { statusColor = '#0056b3'; statusText = 'Đang xử lý'; }
+    else if (ticket.status === 'Closed') { statusColor = '#10b981'; statusText = 'Đã giải quyết'; }
+    else { statusColor = '#6b7280'; statusText = ticket.status; }
 
     const deptNames = {
         "DEPT_01": "Phòng Đào tạo",
@@ -1139,24 +1310,13 @@ function renderTicketCard(ticket) {
                     ${statusText}
                 </span>
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">🏢 ${deptNames[ticket.department]}</p>
-            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 12px;">📅 Ngày tạo: ${ticket.date}</p>
-
-            ${ticket.status !== 'Closed' ? `
-            <div style="display: flex; gap: 8px; border-top: 1px dashed var(--border-color); padding-top: 12px;">
-                <button onclick="window.openEditModal('${ticket.id}')" style="flex: 1; padding: 8px; background: var(--bg-color); border: 1px solid var(--primary-color); color: var(--primary-color); border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                    ✏️ Chỉnh sửa
-                </button>
-                <button onclick="window.cancelTicket('${ticket.id}')" style="flex: 1; padding: 8px; background: var(--bg-color); border: 1px solid var(--danger-color); color: var(--danger-color); border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: all 0.2s;">
-                    🗑️ Hủy yêu cầu
-                </button>
-            </div>
-            ` : ''}
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">🏢 ${deptNames[ticket.department] || 'Phòng ban khác'}</p>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 4px;">📅 Ngày tạo: ${ticket.date}</p>
         </div>
     `;
 }
 
-// Hàm vẽ biểu đồ tròn (Chart.js)
+// Hàm vẽ biểu đồ hình tròn (Chart.js) thống kê tỷ lệ xử lý đơn từ học vụ
 function renderPieChart(tickets) {
     const ctx = document.getElementById('ticketStatusChart');
     if (!ctx) return;
@@ -1189,84 +1349,10 @@ function renderPieChart(tickets) {
     });
 }
 
-// ================================================================
-// TV5: XỬ LÝ HÀNH ĐỘNG (CHỈNH SỬA / HỦY / REFRESH)
-// ================================================================
-
-// Nạp chồng (Override) lại hàm refreshList để TV4 gọi sau khi đẩy form
+// Thiết lập hàm Nạp lại danh sách khi có tín hiệu gửi thành công từ Form
 window.refreshList = function () {
-    console.log("TV5: Đã nhận tín hiệu tạo Ticket mới từ TV4, tiến hành refresh...");
-    // Chỉ render lại nếu người dùng đang đứng ở tab Lịch sử
     const historyTabBtn = document.querySelector('.nav-item[data-target="history"]');
     if (historyTabBtn && historyTabBtn.classList.contains('active')) {
-        window.renderHistoryTab();
+        window.renderHistoryTab(); // Tải lại dữ liệu và vẽ lại UI
     }
-};
-
-window.cancelTicket = function(ticketId) {
-    if (confirm("Bạn có chắc chắn muốn hủy yêu cầu hỗ trợ này không?")) {
-        // Thực tế: Gửi lệnh DELETE/UPDATE status qua Zoho API.
-        // Ở đây mô phỏng xóa local để demo UI
-        window.allUserTickets = window.allUserTickets.filter(t => t.id !== ticketId);
-        mockTickets = mockTickets.filter(t => t.id !== ticketId);
-        // Render lại danh sách, giữ nguyên bộ lọc đang chọn
-        window.filterAndRenderTickets(); 
-        
-        // Cập nhật lại biểu đồ
-        renderPieChart(window.allUserTickets);
-    }
-};
-
-// Mở Modal Chỉnh sửa (Tái sử dụng cấu trúc UI của TV2)
-window.openEditModal = function(ticketId) {
-    const ticket = mockTickets.find(t => t.id === ticketId);
-    if (!ticket) return;
-
-    const modalHtml = `
-        <div class="modal-overlay active" id="tv5-edit-modal" style="z-index: 2000;">
-            <div class="modal-content">
-                <button class="modal-close" onclick="document.getElementById('tv5-edit-modal').remove()">&times;</button>
-                <div class="modal-header"><span class="modal-category-badge">Chỉnh sửa Ticket</span></div>
-                <div style="padding: 16px 24px 24px;">
-                    <form id="tv5-edit-form">
-                        <div style="margin-bottom: 16px;">
-                            <label style="font-size: 0.85em; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">Phòng ban tiếp nhận</label>
-                            <select id="edit-dept" style="width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 2px solid var(--border-color); font-size: 0.95em; outline: none;">
-                                <option value="DEPT_01" ${ticket.department === 'DEPT_01' ? 'selected' : ''}>Phòng Đào tạo</option>
-                                <option value="DEPT_02" ${ticket.department === 'DEPT_02' ? 'selected' : ''}>Phòng Công tác Sinh viên</option>
-                                <option value="DEPT_03" ${ticket.department === 'DEPT_03' ? 'selected' : ''}>Phòng Tài chính Kế toán</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 24px;">
-                            <label style="font-size: 0.85em; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px; display: block;">Nội dung yêu cầu</label>
-                            <textarea id="edit-subject" rows="3" style="width: 100%; padding: 12px; border-radius: var(--radius-sm); border: 2px solid var(--border-color); font-size: 0.95em; outline: none; font-family: inherit;">${ticket.subject}</textarea>
-                        </div>
-                        <button type="button" onclick="window.submitEdit('${ticket.id}')" style="width: 100%; padding: 14px; background: var(--primary-color); color: white; border: none; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; transition: var(--transition);">Lưu thay đổi</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    `;
-    document.body.insertAdjacentHTML('beforeend', modalHtml);
-};
-
-window.submitEdit = function(ticketId) {
-    const newDept = document.getElementById('edit-dept').value;
-    const newSubject = document.getElementById('edit-subject').value;
-
-    if (!newSubject.trim()) {
-        alert("Nội dung yêu cầu không được để trống!");
-        return;
-    }
-
-    // Thực tế: Đẩy API PUT/PATCH cập nhật Zoho Desk
-    const ticket = mockTickets.find(t => t.id === ticketId);
-    if (ticket) {
-        ticket.department = newDept;
-        ticket.subject = newSubject;
-    }
-
-    document.getElementById('tv5-edit-modal').remove();
-    if(typeof window._showToast === 'function') window._showToast('Cập nhật thành công! ✅');
-    window.renderHistoryTab(); // Tải lại danh sách để xem thay đổi
 };
