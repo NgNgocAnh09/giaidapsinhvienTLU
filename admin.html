@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Quản Trị FAQs - TLU Helpdesk</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-black" style="background-color: #f4f6f9; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+    <div class="screen-container active">
+        <header class="app-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 30px; background: #1e1e2f; color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+            <div class="header-title" style="font-size: 1.3rem; font-weight: 700; letter-spacing: 0.5px;">
+                🏛️ Cổng Quản Trị Hệ Thống <span style="font-weight: 300; font-size: 0.9em; color: #a0aec0;">| Quản Lý FAQs</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <span id="admin-email-text" style="font-size: 0.9em; font-weight: 600; color: #38bdf8; background: rgba(56, 189, 248, 0.1); padding: 6px 12px; border-radius: 20px;">
+                    🔄 Đang xác thực Admin...
+                </span>
+                <button id="btn-admin-logout" style="display: flex; align-items: center; gap: 8px; background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 12px; cursor: pointer; font-size: 0.88em; font-weight: 600; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 10px rgba(239, 68, 68, 0.25); outline: none;">
+                    <span>Đăng xuất Admin</span> 🚪
+                </button>
+            </div>
+        </header>
+
+        <main style="padding: 30px; max-width: 1100px; margin: 0 auto; width: 100%;">
+            
+            <div style="display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 5px solid #3b82f6;">
+                    <div style="font-size: 0.85em; color: #64748b; font-weight: 600; text-transform: uppercase;">Tổng số câu hỏi</div>
+                    <div id="stat-total-faqs" style="font-size: 1.8rem; font-weight: 700; color: #1e293b; margin-top: 5px;">0</div>
+                </div>
+                <div style="flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 5px solid #10b981;">
+                    <div style="font-size: 0.85em; color: #64748b; font-weight: 600; text-transform: uppercase;">Tổng lượt tương tác (Like)</div>
+                    <div id="stat-total-likes" style="font-size: 1.8rem; font-weight: 700; color: #1e293b; margin-top: 5px;">0</div>
+                </div>
+                <div style="flex: 1; min-width: 200px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 5px solid #f59e0b;">
+                    <div style="font-size: 0.85em; color: #64748b; font-weight: 600; text-transform: uppercase;">Danh mục tâm điểm</div>
+                    <div id="stat-hot-category" style="font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">📋 Đang tính...</div>
+                </div>
+            </div>
+
+            <div style="background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px; color: #333;">
+                <h3 style="margin-top: 0; color: #1e1e2f; font-weight: 700; font-size: 1.2rem; border-bottom: 2px solid #edf2f7; padding-bottom: 12px;" id="form-title">
+                    ✨ Thêm Câu Hỏi Thường Gặp Mới
+                </h3>
+                <form id="admin-faq-form" style="margin-top: 20px;">
+                    <input type="hidden" id="edit-doc-id" value="">
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.85em; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Danh mục bộ câu hỏi</label>
+                        <select id="faq-category" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.95em; outline: none; background-color: #f8fafc;" required>
+                            <option value="tin_chi">📚 Tín chỉ</option>
+                            <option value="hoc_phi">💰 Học phí</option>
+                            <option value="khao_thi">📝 Khảo thí</option>
+                            <option value="hanh_chinh">🏛️ Hành chính</option>
+                            <option value="ky_thuat">🛠️ Kỹ thuật</option>
+                        </select>
+                    </div>
+
+                    <div style="margin-bottom: 15px;">
+                        <label style="font-size: 0.85em; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Nội dung câu hỏi</label>
+                        <input type="text" id="faq-question" placeholder="Nhập thắc mắc sinh viên thường gặp..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.95em; outline: none;" required>
+                    </div>
+
+                    <div style="margin-bottom: 20px;">
+                        <label style="font-size: 0.85em; font-weight: 600; color: #4a5568; display: block; margin-bottom: 6px;">Nội dung câu trả lời giải đáp</label>
+                        <textarea id="faq-answer" rows="3" placeholder="Nhập câu trả lời chi tiết chính thức..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #cbd5e1; font-size: 0.95em; outline: none; font-family: inherit; resize: vertical;" required></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 12px;">
+                        <button type="submit" id="btn-submit-faq" style="flex: 1; padding: 12px; background: #10b981; color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95em; cursor: pointer; transition: background 0.2s;">💾 Đăng Lên Website</button>
+                        <button type="button" id="btn-cancel-edit" style="padding: 12px 20px; background: #64748b; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: none;">Hủy sửa</button>
+                    </div>
+                </form>
+            </div>
+
+            <div style="background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); color: #333; margin-bottom: 30px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="margin: 0; color: #1e1e2f; font-weight: 700; font-size: 1.1rem;">🔍 Bộ Lọc Tìm Kiếm & Sắp Xếp Trực Quan</h3>
+                    <button id="btn-export-data" style="padding: 10px 18px; background: #4f46e5; color: white; border: none; border-radius: 8px; font-size: 0.85em; font-weight: 600; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 6px rgba(79, 70, 229, 0.15);">📥 Xuất báo cáo dữ liệu (JSON)</button>
+                </div>
+                <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                    <input type="text" id="admin-search-input" placeholder="🔍 Tìm kiếm nhanh tiêu đề câu hỏi hoặc ruột câu trả lời..." style="flex: 2; min-width: 250px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; font-size: 0.9em;">
+                    
+                    <select id="admin-filter-category" style="flex: 1; min-width: 160px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; outline: none; font-size: 0.9em;">
+                        <option value="all">📋 Tất cả danh mục</option>
+                        <option value="tin_chi">📚 Tín chỉ</option>
+                        <option value="hoc_phi">💰 Học phí</option>
+                        <option value="khao_thi">📝 Khảo thí</option>
+                        <option value="hanh_chinh">🏛️ Hành chính</option>
+                        <option value="ky_thuat">🛠️ Kỹ thuật</option>
+                    </select>
+
+                    <select id="admin-sort-likes" style="flex: 1; min-width: 160px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; background: white; outline: none; font-size: 0.9em;">
+                        <option value="none">Sort: Thứ tự mặc định</option>
+                        <option value="desc">🔥 Lượt thích nhiều nhất (Hot)</option>
+                        <option value="asc">❄️ Lượt thích ít nhất</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="background: #ffffff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); color: #333;">
+                <h3 style="margin-top: 0; color: #1e1e2f; font-weight: 700; font-size: 1.1rem; margin-bottom: 20px;">📋 Toàn Bộ Danh Sách Câu Hỏi Trực Tuyến</h3>
+                <div id="admin-faq-list" style="display: flex; flex-direction: column; gap: 15px;">
+                    <p style="text-align: center; color: #6b7280; padding: 20px;">⏳ Đang tải dữ liệu từ cơ sở dữ liệu Firestore...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, addDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAPMC0P8vXHt4a1E1f6wx0URYB2wexHqcY",
+            authDomain: "tlu-helpdesk-v2.firebaseapp.com",
+            projectId: "tlu-helpdesk-v2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let localFAQs = [];
+        const CATEGORY_LABELS = {
+            "tin_chi": "📚 Tín chỉ", "hoc_phi": "💰 Học phí", "khao_thi": "📝 Khảo thí", "hanh_chinh": "🏛️ Hành chính", "ky_thuat": "🛠️ Kỹ thuật"
+        };
+
+        // HIỆU ỨNG HOVER NÚT ĐĂNG XUẤT BO GÓC MỀM MẠI
+        const logoutBtn = document.getElementById('btn-admin-logout');
+        logoutBtn.addEventListener('mouseover', () => { 
+            logoutBtn.style.background = '#dc2626'; 
+            logoutBtn.style.transform = 'translateY(-2px)';
+            logoutBtn.style.boxShadow = '0 6px 14px rgba(220, 38, 38, 0.35)';
+        });
+        logoutBtn.addEventListener('mouseout', () => { 
+            logoutBtn.style.background = '#ef4444'; 
+            logoutBtn.style.transform = 'none';
+            logoutBtn.style.boxShadow = '0 4px 10px rgba(239, 68, 68, 0.25)';
+        });
+
+        // KIỂM TRA PHÂN QUYỀN
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.email === "admin@tlu.edu.vn") {
+                document.getElementById("admin-email-text").innerText = `● Admin: ${user.email}`;
+                fetchFAQs();
+            } else {
+                window.location.replace("index.html");
+            }
+        });
+
+        // XỬ LÝ ĐĂNG XUẤT
+        logoutBtn.addEventListener('click', () => {
+            if (confirm("Kiệt có muốn đăng xuất tài khoản Quản trị viên hệ thống?")) {
+                sessionStorage.clear();
+                localStorage.clear();
+                signOut(auth).then(() => {
+                    window.location.replace("index.html");
+                }).catch(() => {
+                    window.location.replace("index.html");
+                });
+            }
+        });
+
+        // HÀM TÍNH TOÁN BỘ SỐ THỐNG KÊ (ANALYTICS)
+        function calculateStatistics() {
+            document.getElementById('stat-total-faqs').innerText = localFAQs.length;
+            
+            const totalLikes = localFAQs.reduce((sum, item) => sum + (item.likes || 0), 0);
+            document.getElementById('stat-total-likes').innerText = totalLikes;
+
+            const counts = {};
+            localFAQs.forEach(f => { counts[f.category] = (counts[f.category] || 0) + 1; });
+            let topCat = "Chưa có";
+            let maxCount = 0;
+            for (const cat in counts) {
+                if (counts[cat] > maxCount) {
+                    maxCount = counts[cat];
+                    topCat = CATEGORY_LABELS[cat] || cat;
+                }
+            }
+            document.getElementById('stat-hot-category').innerText = maxCount > 0 ? topCat + ` (${maxCount} bộ)` : "Chưa có";
+        }
+
+        // XUẤT DATA BÁO CÁO JSON
+        document.getElementById('btn-export-data').addEventListener('click', () => {
+            if (localFAQs.length === 0) {
+                alert("Không có dữ liệu để xuất file!");
+                return;
+            }
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(localFAQs, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `TLU_FAQs_Report_${new Date().toLocaleDateString('vi-VN')}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        });
+
+        // READ DỮ LIỆU
+        async function fetchFAQs() {
+            try {
+                const querySnapshot = await getDocs(collection(db, "faqs"));
+                localFAQs = [];
+                querySnapshot.forEach((docSnap) => {
+                    localFAQs.push({ ...docSnap.data(), _docId: docSnap.id });
+                });
+                calculateStatistics();
+                filterAndRenderAdminFAQs();
+            } catch (err) {
+                document.getElementById('admin-faq-list').innerHTML = '<p style="color: red; text-align: center;">❌ Lỗi đồng bộ dữ liệu.</p>';
+            }
+        }
+
+        // RENDER CÓ BỘ LỌC VÀ SẮP XẾP REALTIME
+        window.filterAndRenderAdminFAQs = function() {
+            let filtered = [...localFAQs];
+
+            const searchQuery = document.getElementById('admin-search-input').value.toLowerCase().trim();
+            if (searchQuery) {
+                filtered = filtered.filter(f => 
+                    (f.question && f.question.toLowerCase().includes(searchQuery)) || 
+                    (f.answer && f.answer.toLowerCase().includes(searchQuery))
+                );
+            }
+
+            const selectedCategory = document.getElementById('admin-filter-category').value;
+            if (selectedCategory !== 'all') {
+                filtered = filtered.filter(f => f.category === selectedCategory);
+            }
+
+            const sortType = document.getElementById('admin-sort-likes').value;
+            if (sortType === 'desc') {
+                filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+            } else if (sortType === 'asc') {
+                filtered.sort((a, b) => (a.likes || 0) - (b.likes || 0));
+            }
+
+            const listContainer = document.getElementById('admin-faq-list');
+            if (filtered.length === 0) {
+                listContainer.innerHTML = '<p style="text-align: center; color: #64748b; background: #f8fafc; padding: 30px; border-radius: 8px; border: 1px dashed #cbd5e1;">🔍 Không tìm thấy kết quả phù hợp với bộ lọc.</p>';
+                return;
+            }
+
+            listContainer.innerHTML = filtered.map(faq => `
+                <div style="border: 1px solid #e2e8f0; padding: 20px; border-radius: 12px; background: #ffffff; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 15px;">
+                        <span style="font-size: 1.05rem; font-weight: 700; color: #1e293b; line-height: 1.4;">❓ ${faq.question}</span>
+                        <span style="background: #e0f2fe; color: #0369a1; padding: 4px 10px; border-radius: 6px; font-size: 0.75em; font-weight: 700; white-space: nowrap;">
+                            ${CATEGORY_LABELS[faq.category] || faq.category}
+                        </span>
+                    </div>
+                    <div style="margin: 12px 0; padding: 12px; background: #f8fafc; border-radius: 8px; color: #334155; font-size: 0.95rem; border-left: 4px solid #cbd5e1;">
+                        <strong>💡 Đáp:</strong> ${faq.answer}
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 12px; border-top: 1px dashed #f1f5f9;">
+                        <div style="font-size: 0.82em; color: #64748b; display: flex; gap: 12px;">
+                            <span>👍 Thích: <strong style="color: #10b981;">${faq.likes || 0}</strong></span>
+                            <span>👎 Không thích: <strong>${faq.dislikes || 0}</strong></span>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <button onclick="window.startEditFAQ('${faq._docId}')" style="padding: 6px 14px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.82em; font-weight: 600;">✏️ Sửa</button>
+                            <button onclick="window.deleteFAQ('${faq._docId}')" style="padding: 6px 14px; background: #ef4444; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.82em; font-weight: 600;">🗑️ Xóa</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // GẮN SỰ KIỆN LẮNG NGHE CHO BỘ LỌC TÌM KIẾM
+        document.getElementById('admin-search-input').addEventListener('input', window.filterAndRenderAdminFAQs);
+        document.getElementById('admin-filter-category').addEventListener('change', window.filterAndRenderAdminFAQs);
+        document.getElementById('admin-sort-likes').addEventListener('change', window.filterAndRenderAdminFAQs);
+
+        // CREATE & UPDATE
+        document.getElementById('admin-faq-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const docId = document.getElementById('edit-doc-id').value;
+            const category = document.getElementById('faq-category').value;
+            const question = document.getElementById('faq-question').value;
+            const answer = document.getElementById('faq-answer').value;
+
+            try {
+                if (docId) {
+                    await updateDoc(doc(db, "faqs", docId), { category, question, answer });
+                    alert("✅ Hệ thống đã lưu lại nội dung cập nhật thành công!");
+                } else {
+                    await addDoc(collection(db, "faqs"), {
+                        category, question, answer, faq_id: "faq_" + Date.now(), likes: 0, dislikes: 0
+                    });
+                    alert("✅ Hệ thống đã đăng câu hỏi thường gặp mới thành công!");
+                }
+                resetForm();
+                fetchFAQs();
+            } catch (err) { alert("❌ Thao tác lỗi: " + err.message); }
+        });
+
+        window.startEditFAQ = function(docId) {
+            const faq = localFAQs.find(f => f._docId === docId);
+            if (!faq) return;
+            document.getElementById('form-title').innerText = "✏️ Chỉnh Sửa Câu Hỏi Thường Gặp";
+            document.getElementById('edit-doc-id').value = faq._docId;
+            document.getElementById('faq-category').value = faq.category;
+            document.getElementById('faq-question').value = faq.question;
+            document.getElementById('faq-answer').value = faq.answer;
+            document.getElementById('btn-submit-faq').innerText = "💾 Lưu Thay Đổi";
+            document.getElementById('btn-cancel-edit').style.display = "inline-block";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        // DELETE
+        window.deleteFAQ = async function(docId) {
+            if (confirm("Kiệt có muốn xóa hoàn toàn câu hỏi thường gặp này không?")) {
+                try {
+                    await deleteDoc(doc(db, "faqs", docId));
+                    alert("🗑️ Đã xóa câu hỏi khỏi cơ sở dữ liệu!");
+                    fetchFAQs();
+                } catch (err) { alert("❌ Lỗi xóa: " + err.message); }
+            }
+        };
+
+        function resetForm() {
+            document.getElementById('form-title').innerText = "✨ Thêm Câu Hỏi Thường Gặp Mới";
+            document.getElementById('edit-doc-id').value = "";
+            document.getElementById('admin-faq-form').reset();
+            document.getElementById('btn-submit-faq').innerText = "💾 Đăng Lên Website";
+            document.getElementById('btn-cancel-edit').style.display = "none";
+        }
+        document.getElementById('btn-cancel-edit').addEventListener('click', resetForm);
+    </script>
+</body>
+</html>
