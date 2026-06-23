@@ -3,8 +3,13 @@ from flask_cors import CORS
 import requests
 import json
 import sys
+import os
+import uuid
+import time
 
-# Thiet lap encoding UTF-8 cho console de tranh loi UnicodeEncodeError tren Windows
+# ================================================================
+# 1. CẤU HÌNH ENCODING CHO WINDOWS
+# ================================================================
 if sys.stdout.encoding != 'utf-8':
     try:
         sys.stdout.reconfigure(encoding='utf-8')
@@ -16,35 +21,56 @@ if sys.stderr.encoding != 'utf-8':
     except AttributeError:
         pass
 
+# ================================================================
+# 2. KHỞI TẠO FLASK APP & CORS
+# ================================================================
 app = Flask(__name__)
-# Kích hoạt CORS cho phép toàn bộ ứng dụng Frontend kết nối vào không bị chặn
-CORS(app)
+CORS(app) # Cho phép Frontend (cổng 5500 hoặc live server) gọi API thoải mái
 
 # ================================================================
-# CẤU HÌNH THÔNG SỐ ZOHO DESK (Điền thông tin thật của Ngọc Ánh vào đây)
+# 3. CẤU HÌNH GOOGLE CLOUD (Phần của Thành viên 3 - Tuấn Hiệp)
+# ================================================================
+# CHÚ Ý QUAN TRỌNG: Bạn PHẢI để file key.json nằm cùng thư mục với file server.py này
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./key.json"
+
+try:
+    from google.cloud import texttospeech
+    from google.cloud import storage
+    from google.cloud import firestore
+    
+    # Khởi tạo các client của Google Cloud
+    tts_client = texttospeech.TextToSpeechClient()
+    storage_client = storage.Client()
+    db = firestore.Client(project="academichelp-b46a9")
+    
+    # Tên Bucket lưu file MP3 (Thay bằng tên thật của bạn nếu cần)
+    BUCKET_NAME = "tlu-faq-audio-bucket-2026"
+    print("✅ Đã kết nối thành công với Google Cloud (TTS, Storage, Firestore)!")
+except Exception as e:
+    print(f"⚠️ Chưa thể khởi tạo Google Cloud. Lỗi: {e}")
+    print("Vui lòng kiểm tra lại file key.json và các thư viện (google-cloud-texttospeech, storage, firestore).")
+
+
+# ================================================================
+# 4. CẤU HÌNH THÔNG SỐ ZOHO DESK (Phần của Ngọc Ánh)
 # ================================================================
 ZOHO_CLIENT_ID = "1000.81OYNEW5BV0RX9GTG3L0J0L4SSVN0Y"
 ZOHO_CLIENT_SECRET = "7032f02c6eb20a1af464a85138753ff1d004e6abf4"
 ZOHO_REFRESH_TOKEN = "1000.6fd31e5ddcf1ae3e31ae8aa877702ec1.af121e0079ebfa655794739084e7af2f"
 ZOHO_ORG_ID = "928553057"
 
-# 1. BẢNG ÁNH XẠ XUÔI: Đổi mã Web thành ID thật trên Zoho Desk
 DEPARTMENTS_POST_MAP = {
     "DEPT_01": "1397229000000418032",
     "DEPT_02": "1397229000000424619",
     "DEPT_03": "1397229000000429200"
 }
 
-# 2. BẢNG ÁNH XẠ NGƯỢC: Đổi tên phòng ban từ Zoho trả về thành mã Web để vẽ bộ lọc
 DEPARTMENTS_GET_MAP = {
     "Phòng Đào tạo": "DEPT_01",
     "Phòng Công tác Sinh viên": "DEPT_02",
     "Phòng Tài chính Kế toán": "DEPT_03"
 }
 
-import time
-
-# Bộ nhớ đệm Token để tránh gọi API Zoho Accounts liên tục
 cached_access_token = None
 token_expiry_time = 0
 
@@ -52,9 +78,7 @@ def get_access_token():
     """Tự động lấy Access Token mới từ Refresh Token (có cache)"""
     global cached_access_token, token_expiry_time
     
-    # Nếu token vẫn còn hạn (trừ hao 60 giây an toàn), dùng lại token cũ
     if cached_access_token and time.time() < token_expiry_time - 60:
-        print("⚡ [Token Cache]: Sử dụng Access Token còn hạn từ bộ nhớ đệm...")
         return cached_access_token
 
     url = "https://accounts.zoho.com/oauth/v2/token"
@@ -64,23 +88,21 @@ def get_access_token():
         "client_secret": ZOHO_CLIENT_SECRET,
         "grant_type": "refresh_token"
     }
-    print("⏳ [Bước 1]: Đang gọi sang Zoho Accounts để lấy Access Token mới...")
     response = requests.post(url, params=params)
     data = response.json()
     
     access_token = data.get("access_token")
-    expires_in = data.get("expires_in", 3600)  # Mặc định Zoho trả về expires_in là 3600 giây
+    expires_in = data.get("expires_in", 3600)
     
     if access_token:
         cached_access_token = access_token
         token_expiry_time = time.time() + expires_in
-        print("✅ [Bước 2]: Đã nhận và lưu Access Token mới vào bộ nhớ đệm!")
-    else:
-        print("❌ [Lỗi]: Không thể lấy Access Token từ Zoho Accounts. Chi tiết:", data)
-        
+    
     return access_token
 
-# Khai báo đường dẫn API Gateway local
+# ================================================================
+# API 1: ZOHO GATEWAY
+# ================================================================
 @app.route('/zoho-gateway', methods=['GET', 'POST'])
 def zoho_gateway():
     try:
@@ -109,9 +131,7 @@ def zoho_gateway():
             }
 
             zoho_url = "https://desk.zoho.com/api/v1/tickets"
-            print(f"⏳ [Bước 3]: Đang đẩy dữ liệu đơn lên Zoho Desk (ID Phòng: {real_dept_id})...")
             res = requests.post(zoho_url, headers=zoho_headers, json=zoho_payload)
-            print("\n🚨 [ZOHO POST RESPONSE]:", res.text)
             return res.text, res.status_code
 
         # --- LUỒNG KÉO LỊCH SỬ VỀ (GET) ---
@@ -122,8 +142,6 @@ def zoho_gateway():
 
             zoho_url = f"https://desk.zoho.com/api/v1/tickets/search?email={email}"
             res = requests.get(zoho_url, headers=zoho_headers)
-            print("\n🚨 [ZOHO GET RESPONSE]:", res.text)
-
 
             if res.status_code == 200:
                 res_data = res.json()
@@ -158,7 +176,7 @@ def zoho_gateway():
                         "id": t.get("id"),
                         "subject": t.get("subject"),
                         "department": mapped_dept_code,
-                        "status": t.get("status"), # Trả về chuẩn: Open, In Progress, Closed
+                        "status": t.get("status"), 
                         "date": formatted_date
                     })
                 return jsonify(optimized_list), 200
@@ -168,7 +186,101 @@ def zoho_gateway():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
+# ================================================================
+# API 2: AI GIỌNG NÓI (TEXT-TO-SPEECH)
+# ================================================================
+@app.route('/tts', methods=['POST'])
+def tts_api():
+    try:
+        req_data = request.get_json() or {}
+        text = req_data.get('text')
+        
+        if not text:
+            return jsonify({"error": "Vui lòng cung cấp nội dung text"}), 400
+            
+        print(f"⏳ Đang tạo AI Giọng nói cho nội dung: {text[:30]}...")
+
+        # 1. Gọi Google TTS API
+        synthesis_input = texttospeech.SynthesisInput(text=text)
+        voice = texttospeech.VoiceSelectionParams(language_code="vi-VN", name="vi-VN-Standard-A")
+        audio_config = texttospeech.AudioConfig(audio_encoding=texttospeech.AudioEncoding.MP3)
+
+        response = tts_client.synthesize_speech(input=synthesis_input, voice=voice, audio_config=audio_config)
+
+        # 2. Lưu file MP3 lên Google Cloud Storage
+        bucket = storage_client.bucket(BUCKET_NAME)
+        filename = f"faq_audio_{uuid.uuid4().hex[:8]}.mp3"
+        blob = bucket.blob(filename)
+        blob.upload_from_string(response.audio_content, content_type="audio/mpeg")
+
+        print(f"✅ Đã tạo file MP3 và lưu tại Storage: {filename}")
+        
+        # 3. Trả link về cho Frontend
+        return jsonify({"audio_url": blob.public_url, "status": "success"}), 200
+
+    except Exception as e:
+        print(f"❌ Lỗi Text-to-Speech: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+# ================================================================
+# API 3: QUẢN LÝ BOOKMARK (FIRESTORE)
+# ================================================================
+@app.route('/bookmarks', methods=['POST'])
+def manage_bookmarks_api():
+    try:
+        req_data = request.get_json() or {}
+        email = req_data.get('email')
+        action = req_data.get('action')  # 'get', 'add', 'remove'
+        faq_id = req_data.get('faq_id')
+        
+        if not email:
+            return jsonify({"error": "Thiếu email sinh viên"}), 400
+            
+        user_ref = db.collection("user_bookmarks").document(email)
+        
+        # HÀNH ĐỘNG 1: GET (Lấy danh sách bookmark)
+        if action == 'get':
+            doc_snap = user_ref.get()
+            if doc_snap.exists:
+                saved_faqs = doc_snap.to_dict().get('saved_faqs', [])
+            else:
+                user_ref.set({'saved_faqs': []})
+                saved_faqs = []
+            return jsonify({"saved_faqs": saved_faqs}), 200
+            
+        # HÀNH ĐỘNG 2: ADD (Thêm câu hỏi vào bookmark)
+        elif action == 'add':
+            if not faq_id:
+                return jsonify({"error": "Thiếu faq_id"}), 400
+            user_ref.set({"saved_faqs": firestore.ArrayUnion([faq_id])}, merge=True)
+            return jsonify({"status": "success", "message": "Đã thêm bookmark"}), 200
+            
+        # HÀNH ĐỘNG 3: REMOVE (Xóa câu hỏi khỏi bookmark)
+        elif action == 'remove':
+            if not faq_id:
+                return jsonify({"error": "Thiếu faq_id"}), 400
+            user_ref.set({"saved_faqs": firestore.ArrayRemove([faq_id])}, merge=True)
+            return jsonify({"status": "success", "message": "Đã xóa bookmark"}), 200
+            
+        else:
+            return jsonify({"error": "Hành động không hợp lệ"}), 400
+
+    except Exception as e:
+        print(f"❌ Lỗi xử lý Bookmark: {e}")
+        return jsonify({"error": str(e)}), 500
+
+
+# ================================================================
+# KHỞI CHẠY SERVER
+# ================================================================
 if __name__ == '__main__':
-    # Chạy cục bộ tại cổng 5000 công khai
-    print("🚀 Server Local đang chạy ổn định tại đường dẫn: http://127.0.0.1:5000/zoho-gateway")
+    print("\n" + "="*60)
+    print("🚀 SERVER BACKEND ĐANG CHẠY TẠI CÁC ĐỊA CHỈ:")
+    print(" 1. Zoho API:  http://127.0.0.1:5000/zoho-gateway")
+    print(" 2. Giọng nói: http://127.0.0.1:5000/tts")
+    print(" 3. Bookmark:  http://127.0.0.1:5000/bookmarks")
+    print("="*60 + "\n")
+    
     app.run(debug=True, port=5000)
