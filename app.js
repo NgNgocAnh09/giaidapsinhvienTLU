@@ -46,6 +46,11 @@ let bannerInterval = null;
 let currentBannerIndex = 0;
 let homeInitialized = false;
 let homeLoading = false;
+
+// TV2: Phân trang danh sách FAQ
+const FAQS_PER_PAGE = 10;        // Số câu hỏi mỗi trang
+let currentPage = 1;             // Trang đang xem
+let filteredFAQs = [];           // Danh sách FAQ sau khi lọc (dùng cho phân trang)
 window.allUserTickets = [];
 
 // ================================================================
@@ -264,6 +269,9 @@ function renderHomeTab() {
 
         <!-- FAQ List -->
         <div class="faq-list" id="faq-list"></div>
+
+        <!-- Pagination -->
+        <div class="faq-pagination" id="faq-pagination"></div>
     `;
 
     // Render banners
@@ -354,7 +362,7 @@ function resetBannerAutoPlay() {
 // ================================================================
 // TV2: SEARCH & CATEGORY FILTER
 // ================================================================
-function filterAndRenderFAQs() {
+function filterAndRenderFAQs(resetPage = true) {
     let filtered = [...allFAQs];
 
     // Lọc theo danh mục
@@ -371,24 +379,39 @@ function filterAndRenderFAQs() {
         );
     }
 
-    renderFAQList(filtered);
+    filteredFAQs = filtered;
+
+    // Khi đổi bộ lọc/tìm kiếm thì về trang 1; khi chỉ cập nhật (vote) thì giữ trang
+    if (resetPage) currentPage = 1;
+
+    // Đảm bảo currentPage không vượt quá tổng số trang sau khi lọc
+    const totalPages = Math.max(1, Math.ceil(filteredFAQs.length / FAQS_PER_PAGE));
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    renderFAQList();
 }
 
-function renderFAQList(faqs) {
+function renderFAQList() {
     const listEl = document.getElementById('faq-list');
     if (!listEl) return;
 
-    if (faqs.length === 0) {
+    if (filteredFAQs.length === 0) {
         listEl.innerHTML = `
             <div class="faq-empty">
                 <div class="faq-empty-icon">🔍</div>
                 <div class="faq-empty-text">Không tìm thấy câu hỏi phù hợp</div>
             </div>
         `;
+        renderPagination(0);
         return;
     }
 
-    listEl.innerHTML = faqs.map((faq) => {
+    // Cắt danh sách theo trang hiện tại
+    const totalPages = Math.ceil(filteredFAQs.length / FAQS_PER_PAGE);
+    const startIndex = (currentPage - 1) * FAQS_PER_PAGE;
+    const pageItems = filteredFAQs.slice(startIndex, startIndex + FAQS_PER_PAGE);
+
+    listEl.innerHTML = pageItems.map((faq) => {
         const categoryLabel = CATEGORY_NAMES[faq.category] || faq.category;
         return `
             <div class="faq-card" data-faq-id="${faq.faq_id}" onclick="window._openModal('${faq.faq_id}')">
@@ -403,7 +426,52 @@ function renderFAQList(faqs) {
             </div>
         `;
     }).join('');
+
+    renderPagination(totalPages);
 }
+
+// TV2: Vẽ thanh phân trang
+function renderPagination(totalPages) {
+    const pagEl = document.getElementById('faq-pagination');
+    if (!pagEl) return;
+
+    // Chỉ 1 trang (hoặc rỗng) thì ẩn thanh phân trang
+    if (totalPages <= 1) {
+        pagEl.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+
+    // Nút lùi
+    html += `<button class="page-btn page-nav" ${currentPage === 1 ? 'disabled' : ''}
+                onclick="window._goFaqPage(${currentPage - 1})">‹</button>`;
+
+    // Các nút số trang
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="page-btn ${i === currentPage ? 'active' : ''}"
+                    onclick="window._goFaqPage(${i})">${i}</button>`;
+    }
+
+    // Nút tiến
+    html += `<button class="page-btn page-nav" ${currentPage === totalPages ? 'disabled' : ''}
+                onclick="window._goFaqPage(${currentPage + 1})">›</button>`;
+
+    pagEl.innerHTML = html;
+}
+
+// TV2: Chuyển trang FAQ
+window._goFaqPage = function (page) {
+    const totalPages = Math.ceil(filteredFAQs.length / FAQS_PER_PAGE);
+    if (page < 1 || page > totalPages || page === currentPage) return;
+
+    currentPage = page;
+    renderFAQList();
+
+    // Cuộn lên đầu danh sách cho dễ xem
+    const listEl = document.getElementById('faq-list');
+    if (listEl) listEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+};
 
 // ================================================================
 // TV2: MODAL POPUP
@@ -531,8 +599,8 @@ async function rateFAQ(faqId, type) {
         }
     }
 
-    // Cập nhật lại danh sách FAQ (cập nhật số like/dislike)
-    filterAndRenderFAQs();
+    // Cập nhật lại danh sách FAQ (cập nhật số like/dislike) - giữ nguyên trang đang xem
+    filterAndRenderFAQs(false);
 
     showToast(type === 'like' ? 'Cảm ơn bạn đã đánh giá! 👍' : 'Cảm ơn góp ý của bạn! 📝');
 }
