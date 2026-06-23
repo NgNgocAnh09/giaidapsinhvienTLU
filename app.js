@@ -1399,3 +1399,32 @@ window.refreshList = function () {
         window.renderHistoryTab(); // Tải lại dữ liệu và vẽ lại UI
     }
 };
+
+// ================================================================
+// TV4 KIỂM TRA TRẠNG THÁI ĐĂNG NHẬP & ĐIỀU HƯỚNG KẾT NỐI 3 TAB (Ý KIỆT)
+// ================================================================
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        sessionStorage.setItem("tlu_userEmail", user.email);
+        
+        // NẾU TÀI KHOẢN ĐĂNG NHẬP LÀ ADMIN: ĐÁ THẲNG SANG WEBSITE QUẢN TRỊ ĐỘC LẬP
+        if (user.email === "admin@tlu.edu.vn") {
+            if (!window.location.pathname.includes("admin.html")) {
+                window.location.href = "admin.html";
+            }
+        } else {
+            // NẾU LÀ TÀI KHOẢN SINH VIÊN BÌNH THƯỜNG (test@tlu.edu.vn): CHO XEM TRANG CHỦ FAQs NHƯ CŨ
+            loginScreen.classList.remove('active');
+            appShell.classList.add('active');
+            initHomeTab();
+        }
+    } else {
+        sessionStorage.removeItem("tlu_userEmail");
+        loginScreen.classList.add('active');
+        appShell.classList.remove('active');
+        stopBannerAutoPlay();
+    }
+});
+
+
+
