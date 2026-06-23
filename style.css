@@ -494,10 +494,62 @@ body {
    TV2: FAQ LIST & CARDS
    ================================================================ */
 .faq-list {
-    padding: 12px 20px 20px;
-    display: flex;
-    flex-direction: column;
+    padding: 12px 20px 8px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
+    align-items: start;
+}
+
+/* ================================================================
+   PHÂN TRANG FAQ
+   ================================================================ */
+.faq-pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding: 8px 20px 24px;
+}
+
+.faq-pagination:empty {
+    padding: 0;
+}
+
+.page-btn {
+    min-width: 36px;
+    height: 36px;
+    padding: 0 10px;
+    border: 1px solid var(--border-color, #e0e0e0);
+    border-radius: var(--radius-md, 8px);
+    background: var(--card-bg, #fff);
+    color: var(--text-color);
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.page-btn:hover:not(:disabled):not(.active) {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+}
+
+.page-btn.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #fff;
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-nav {
+    font-size: 1.1em;
+    line-height: 1;
 }
 
 .faq-card {
@@ -941,9 +993,26 @@ body {
     }
 
     .faq-list {
-        max-width: 800px;
+        max-width: 1000px;
         margin: 0 auto;
     }
+
+    .faq-pagination {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+}
+
+/* Màn hình hẹp: danh sách về 1 cột cho dễ đọc */
+@media (max-width: 600px) {
+    .faq-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Ô "không tìm thấy" chiếm cả 2 cột */
+.faq-list .faq-empty {
+    grid-column: 1 / -1;
 }
 
 @media (max-width: 400px) {
