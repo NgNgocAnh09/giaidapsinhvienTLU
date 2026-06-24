@@ -153,7 +153,7 @@
 
         // XỬ LÝ ĐĂNG XUẤT
         logoutBtn.addEventListener('click', () => {
-            if (confirm("Kiệt có muốn đăng xuất tài khoản Quản trị viên hệ thống?")) {
+            if (confirm("Bạn có muốn đăng xuất tài khoản Quản trị viên hệ thống?")) {
                 sessionStorage.clear();
                 localStorage.clear();
                 signOut(auth).then(() => {
@@ -312,7 +312,7 @@
 
         // DELETE
         window.deleteFAQ = async function(docId) {
-            if (confirm("Kiệt có muốn xóa hoàn toàn câu hỏi thường gặp này không?")) {
+            if (confirm("Bạn có muốn xóa hoàn toàn câu hỏi thường gặp này không?")) {
                 try {
                     await deleteDoc(doc(db, "faqs", docId));
                     alert("🗑️ Đã xóa câu hỏi khỏi cơ sở dữ liệu!");
